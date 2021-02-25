@@ -1,0 +1,23 @@
+{
+  "name": "idraw",
+  "version": "0.0.1",
+  "description": "a draw lib",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/chenshenhai/idraw.git"
+  },
+  "keywords": [
+    "draw",
+    "canvas"
+  ],
+  "author": "chenshenhai",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chenshenhai/idraw/issues"
+  },
+  "homepage": "https://github.com/chenshenhai/idraw#readme"
+}
