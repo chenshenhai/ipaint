@@ -2,7 +2,7 @@
   "name": "idraw",
   "version": "0.0.1",
   "description": "a draw lib",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "rollup -w -c ./scripts/rollup.config.dev.js",
     "build": "rollup -c ./scripts/rollup.config.prod.js"
