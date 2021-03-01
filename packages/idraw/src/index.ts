@@ -1,6 +1,5 @@
 import { TypeIDraw } from './types/index';
 import { Watcher } from './watcher/index';
-// @ts-ignore
 import { Brush } from './brush/index'
 
 export default class IDraw implements TypeIDraw {
@@ -26,15 +25,12 @@ export default class IDraw implements TypeIDraw {
     const brush = this._brush;
     watcher.onDrawStart((p) => {
       brush.drawStart(p)
-      console.log('onDrawStart: ', p)
     });
     watcher.onDraw((p) => {
-      console.log('onDraw: ', p)
       brush.pushPosition(p);
       brush.drawLine();
     });
     watcher.onDrawEnd((p) => {
-      // console.log('onDrawEnd: ', p)
       brush.pushPosition(p);
       brush.drawEnd(p);
     });
