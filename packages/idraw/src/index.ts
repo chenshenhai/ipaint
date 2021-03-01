@@ -1,12 +1,31 @@
-export default async function ( n: number ) {
-  while ( --n ) {
-    await delay( 10, n );
-  }
-}
+import { TypeIDraw } from './types/index';
+import { Watcher } from './watcher/index';
 
-function delay ( interval: number, num: number ): Promise<void> {
-  return new Promise( resolve => setTimeout( () => {
-    console.log(num)
-    resolve();
-  }, interval ) );
+export default class IDraw implements TypeIDraw {
+
+  private _canvas: HTMLCanvasElement;
+  private _watcher: Watcher;
+  private _isStart: boolean = false;
+
+  constructor(canvas: HTMLCanvasElement) {
+    this._canvas = canvas;
+    this._watcher = new Watcher(canvas);
+  }
+
+  start() {
+    if (this._isStart === true) {
+      return;
+    }
+    const watcher = this._watcher;
+    watcher.onDrawStart((p) => {
+      console.log('onDrawStart: ', p)
+    });
+    watcher.onDraw((p) => {
+      console.log('onDraw: ', p)
+    });
+    watcher.onDrawEnd((p) => {
+      console.log('onDrawEnd: ', p)
+    });
+    this._isStart = true;
+  }
 }

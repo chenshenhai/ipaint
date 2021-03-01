@@ -1,11 +1,28 @@
 <html>
   <head>
+    <style>
+      html,body {
+        margin: 0;
+        padding: 0;
+      }
+      .canvas-bg {
+        background-image:
+          linear-gradient(#aaaaaa40 1px, transparent 0),
+          linear-gradient(90deg, #aaaaaa40 1px, transparent 0),
+          linear-gradient(#aaa 1px, transparent 0),
+          linear-gradient(90deg, #aaa 1px, transparent 0);
+        background-size: 10px 10px, 10px 10px, 50px 50px, 50px 50px;
+        width: 401px;
+        height: 401px;
+        margin: 10px;
+      }
+    </style>
   </head>
   <body>
-    <p>hello world</p>
+
+    <canvas width="401" height="401" id="canvas" class="canvas-bg"></canvas>
+
     <script src="./../dist/index.js"></script>
-    <script>
-      helloworld(8)
-    </script>
+    <script type="module" src="./main.js"></script>
   </body>
 </html>

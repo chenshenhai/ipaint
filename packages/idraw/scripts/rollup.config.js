@@ -12,7 +12,8 @@ module.exports = [
     output: {
       file: resolveFile('dist/index.js'),
       format: 'umd',
-      name: 'helloworld',
+      name: 'IDraw',
+      esModule: false,
     }, 
     plugins: [
       typescript(),
