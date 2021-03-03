@@ -1,7 +1,7 @@
-import { TypeIDraw, TypePosition } from './types/index';
+import { TypeIDraw, TypePosition, TypeBrushOptions } from './types/index';
 import { Watcher } from './watcher/index';
-// @ts-ignore
-import { Brush } from './brush/index.js'
+import { Brush } from './brush/index';
+import { loadImage } from './util/loader';
 
 export default class IDraw implements TypeIDraw {
 
@@ -40,38 +40,48 @@ export default class IDraw implements TypeIDraw {
     this._isStart = true;
   }
 
+  async loadBrush(opts: TypeBrushOptions) {
+    const image = await loadImage(opts.src);
+    this._brush.setBrushPoint({
+      width: 20,
+      height: 20,
+      pattern: image,
+      maxSize: 20,
+      minSize: 0,
+    })
+  }
+
   drawPath(path: { positions: TypePosition[] }) {
-    // const brush = this._brush;
-    // path.positions.forEach(async (p, i) => {
-    //   let time = 0;
-    //   if (i > 0) {
-    //     const prev = path.positions[i - 1];
-    //     time = p.t - prev.t;
-    //   }
+    const brush = this._brush;
+    path.positions.forEach((p, i) => {
+      let time = 0;
+      if (i > 0) {
+        const prev = path.positions[i - 1];
+        time = p.t - prev.t;
+      }
 
-    //   if (i === 0) {
-    //     brush.drawStart(p);
-    //   } else if (i === path.positions.length - 1) {
-    //     brush.pushPosition(p);
-    //     brush.drawEnd(p);
-    //   } else {
-    //     brush.pushPosition(p);
-    //   }
+      if (i === 0) {
+        brush.drawStart();
+      } else if (i === path.positions.length - 1) {
+        brush.pushPosition(p);
+        brush.drawEnd();
+      } else {
+        brush.pushPosition(p);
+      }
 
-    //   if (i > 0 && time > 0) {
-    //     brush.drawLine();
-    //     await delay(time);
-    //   }
+      if (i > 0 && time >= 0) {
+        brush.drawLine();
+      }
 
-    // });
+    });
    
   }
 }
 
-// function delay(time: number) {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve
-//     }, time);
-//   })
-// }
+function delay(time: number) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve
+    }, time);
+  })
+}
