@@ -2,13 +2,13 @@ import { TypeIDraw, TypePosition, TypeBrushOptions } from './types/index';
 import { Watcher } from './watcher/index';
 import { Brush } from './brush/index';
 import { loadImage } from './util/loader';
+import { compose, delay } from './util/task';
 
 export default class IDraw implements TypeIDraw {
 
   private _canvas: HTMLCanvasElement;
   private _context: CanvasRenderingContext2D
   private _watcher: Watcher;
-  // @ts-ignore
   private _brush: Brush;
   private _isStart: boolean = false;
 
@@ -68,20 +68,45 @@ export default class IDraw implements TypeIDraw {
       } else {
         brush.pushPosition(p);
       }
-
-      if (i > 0 && time >= 0) {
+      if (i > 0) {
         brush.drawLine();
       }
-
     });
-   
+  }
+
+  async animatePath(path: { positions: TypePosition[] }) {
+    const brush = this._brush;
+    const middlewares: Function[] = [];
+    path.positions.forEach((p, i) => {
+      middlewares.push(async (ctx: any, next: Function) => {
+        let time = 0;
+        if (i > 0) {
+          const prev = path.positions[i - 1];
+          time = p.t - prev.t;
+        }
+        await delay(time);
+
+        if (i === 0) {
+          brush.drawStart();
+        } else if (i === path.positions.length - 1) {
+          brush.pushPosition(p);
+          brush.drawEnd();
+        } else {
+          brush.pushPosition(p);
+        }
+        if (i > 0) {
+          brush.drawLine();
+        }
+        await next();
+      })
+    });
+    try {
+      await compose(middlewares)({});
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 
-function delay(time: number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve
-    }, time);
-  })
-}
+
+

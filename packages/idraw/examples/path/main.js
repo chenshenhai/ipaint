@@ -8,7 +8,10 @@ const iDraw = new IDraw(canvas);
 
 async function main() {
   await iDraw.loadBrush({ src: src });
-  await iDraw.drawPath({
+  // await iDraw.drawPath({
+  //   positions: path.positions
+  // });
+  await iDraw.animatePath({
     positions: path.positions
   });
 }
