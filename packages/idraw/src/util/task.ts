@@ -1,11 +1,11 @@
 
 export function compose (middleware: Function[]) {
   return function (context: any, next?: Function) {
-    let index = -1;
+    // let index = -1;
     return dispatch(0);
 
     function dispatch (i: number): Promise<any> {
-      index = i
+      // index = i
       let fn = middleware[i]
       if (i === middleware.length && next) {
         fn = next;

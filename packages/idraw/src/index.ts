@@ -56,11 +56,6 @@ export default class IDraw implements TypeIDraw {
   drawPath(path: { positions: TypePosition[] }) {
     const brush = this._brush;
     path.positions.forEach((p, i) => {
-      let time = 0;
-      if (i > 0) {
-        const prev = path.positions[i - 1];
-        time = p.t - prev.t;
-      }
 
       if (i === 0) {
         brush.drawStart();

@@ -1,5 +1,4 @@
 const path = require('path');
-const buble = require('@rollup/plugin-buble'); 
 const typescript = require('rollup-plugin-typescript2');
 
 const resolveFile = function(filePath) {
@@ -17,7 +16,6 @@ module.exports = [
     }, 
     plugins: [
       typescript(),
-      buble(),
     ],
   },
 ]

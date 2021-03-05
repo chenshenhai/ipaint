@@ -1,7 +1,6 @@
 import {
   TypeWatcher,
   TypeWatchCallback,
-  TypePosition,
 } from './../types/index';
 
 export class Watcher implements TypeWatcher {
