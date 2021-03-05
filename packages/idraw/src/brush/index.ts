@@ -80,7 +80,8 @@ export class Brush {
     const curve = function(t: number, b: number, c: number, d: number) {
       return c * t / d + b;
     }
-    let brushSize = Math.max(this._brushPoint.minSize,
+    let brushSize = Math.max(
+      this._brushPoint.minSize,
       curve(
         velocity,
         this._brushPoint.maxSize,
@@ -88,13 +89,8 @@ export class Brush {
         this._velocityPressureCoff
       )
     );
-    // if (pos.p > 0) {
-    //   brushSize = Math.max(this._brushPoint.minSize, this._brushPoint.maxSize * pos.p);
-    // }
-
     
     ctx.save();
-    // this.drawPath(ctx, this._prevPosition, pos, brushSize, distance, velocity);
     this.drawPath(ctx, this._prevPosition, pos, brushSize, distance);
     ctx.restore();
 
@@ -126,7 +122,6 @@ export class Brush {
         let px = pos.x;
         let py = pos.y;
         ctx.drawImage(this._brushPoint.pattern, px, py, brushSizeCur, brushSizeCur);
-        
       }
       t += 1 / distance;
     }
@@ -135,7 +130,6 @@ export class Brush {
   getInterlatePos(p0: TypePosition, p1: TypePosition, moveLen: number) {
     let x = p0.x + (p1.x - p0.x) * moveLen;
     let y = p0.y + (p1.y - p0.y) * moveLen;
-  
     return { x: x, y: y, t: 0, };
   }
 
@@ -152,19 +146,24 @@ export class Brush {
       pos.x += p.x;
       pos.y += p.y;
       pos.t += p.t;
-      // pos.p += p.p;
     }
   
     pos.x /= inertanceNum;
     pos.y /= inertanceNum;
     pos.t /= inertanceNum;
-    // pos.p /= inertanceNum;
   
     return pos;
   }
 
-
   setBrushPoint(brush: TypeBrushPoint) {
     this._brushPoint = brush;
   }
+
+  setSize(size: number) {
+    if (this._brushPoint) {
+      this._brushPoint.maxSize = size;
+      this._brushPoint.minSize = 0;
+    }
+  }
+
 }

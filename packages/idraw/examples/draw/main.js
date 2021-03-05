@@ -6,7 +6,10 @@ const canvas = document.querySelector('#canvas');
 const iDraw = new IDraw(canvas);
 
 async function main() {
-  await iDraw.loadBrush({ src: src });
+  await iDraw.loadBrush({
+    src: src,
+    size: 40,
+  });
   iDraw.start();
 }
 

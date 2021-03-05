@@ -7,11 +7,16 @@ const canvas = document.querySelector('#canvas');
 const iDraw = new IDraw(canvas);
 
 async function main() {
-  await iDraw.loadBrush({ src: src });
+  await iDraw.loadBrush({
+    src: src,
+    size: 20,
+  });
+  // iDraw.setBrushSize(40);
+  
   // await iDraw.drawPath({
   //   positions: path.positions
   // });
-  await iDraw.animatePath({
+  await iDraw.playPath({
     positions: path.positions
   });
 }

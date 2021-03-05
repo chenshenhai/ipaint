@@ -43,12 +43,14 @@ export default class IDraw implements TypeIDraw {
   async loadBrush(opts: TypeBrushOptions) {
     const image = await loadImage(opts.src);
     this._brush.setBrushPoint({
-      width: 20,
-      height: 20,
       pattern: image,
-      maxSize: 20,
+      maxSize: opts.size,
       minSize: 0,
     })
+  }
+
+  setBrushSize(size: number) {
+    this._brush.setSize(size);
   }
 
   drawPath(path: { positions: TypePosition[] }) {
@@ -74,7 +76,7 @@ export default class IDraw implements TypeIDraw {
     });
   }
 
-  async animatePath(path: { positions: TypePosition[] }) {
+  async playPath(path: { positions: TypePosition[] }) {
     const brush = this._brush;
     const middlewares: Function[] = [];
     path.positions.forEach((p, i) => {
