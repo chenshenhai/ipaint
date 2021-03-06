@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "declaration": true,
     "outDir": "dist",
     "sourceMap": false,
     "target": "ESNext",
@@ -16,9 +17,9 @@
     "jsx": "preserve",
     "lib": ["ESNext", "dom"],
     "rootDir": ".",
-    "paths": {
-      "idraw": ["packages/idraw/src"]
-    }
+    // "paths": {
+    //   "idraw": ["packages/idraw/src1"]
+    // }
   },
   "include": [
     "packages/global.d.ts",
