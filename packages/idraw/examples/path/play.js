@@ -1,5 +1,5 @@
 import path from './data/path.js';
-import { src } from './../draw/brush/basic.js';
+import { src } from '../draw/brush/basic.js';
 
 const { IDraw } = window;
 
@@ -11,11 +11,6 @@ async function main() {
     src: src,
     size: 20,
   });
-  // iDraw.setBrushSize(40);
-  
-  // await iDraw.drawPath({
-  //   positions: path.positions
-  // });
   await iDraw.playPath({
     positions: path.positions
   });
