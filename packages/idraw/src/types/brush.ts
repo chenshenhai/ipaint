@@ -5,6 +5,7 @@ export type TypeBrushPoint = {
 }
 
 export type TypeBrushOptions = {
+  name: string,
   src: string,
-  size: number;
+  size?: number;
 }

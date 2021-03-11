@@ -7,5 +7,6 @@ export interface TypeIDraw {
   playPath(path: { positions: TypePosition[] }): Promise<void>;
   
   loadBrush(opts: TypeBrushOptions): Promise<void>;
-  // setBrushSize(size: number): Promise<void>; 
+  setBrushSize(size: number): void;
+  useBrush(name: string): void;
 }

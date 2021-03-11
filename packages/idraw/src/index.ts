@@ -1,4 +1,4 @@
-import { TypeIDraw, TypePosition, TypeBrushOptions } from './types/index';
+import { TypeIDraw, TypeData, TypePosition, TypeBrushOptions } from './types/index';
 import { Watcher } from './watcher/index';
 import { Brush } from './brush/index';
 import { loadImage } from './util/loader';
@@ -11,12 +11,17 @@ export default class IDraw implements TypeIDraw {
   private _watcher: Watcher;
   private _brush: Brush;
   private _isStart: boolean = false;
+  private _data: TypeData;
+  private _patternMap: {[name: string]: HTMLImageElement | HTMLCanvasElement} = {};
+  private _currentSize: number = 10;
 
   constructor(canvas: HTMLCanvasElement) {
     this._canvas = canvas;
     this._context = canvas.getContext('2d') as CanvasRenderingContext2D;
     this._watcher = new Watcher(this._canvas);
-    this._brush = new Brush(this._context)
+    this._brush = new Brush(this._context);
+    this._data = { brushMap: {}, paths: [] };
+    // this._patternMap: 
   }
 
   start() {
@@ -42,15 +47,13 @@ export default class IDraw implements TypeIDraw {
 
   async loadBrush(opts: TypeBrushOptions) {
     const image = await loadImage(opts.src);
-    this._brush.setBrushPoint({
-      pattern: image,
-      maxSize: opts.size,
-      minSize: 0,
-    })
+    this._patternMap[opts.name] = image;
+    this._data.brushMap[opts.name] = opts;
   }
 
   setBrushSize(size: number) {
-    this._brush.setSize(size);
+    this._currentSize = size;
+    this._brush.setSize(this._currentSize);
   }
 
   drawPath(path: { positions: TypePosition[] }) {
@@ -102,6 +105,15 @@ export default class IDraw implements TypeIDraw {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  useBrush(name: string) {
+    const image = this._patternMap[name];
+    this._brush.setBrushPoint({
+      pattern: image,
+      maxSize: this._currentSize,
+      minSize: 0,
+    });
   }
 }
 
