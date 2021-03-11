@@ -9,7 +9,7 @@ export type TypeDataBrush = {
 }
 
 export type TypeDataPath = {
-  brush: number,
+  brush: string,
   size: number;
   positions: TypeDataPosition[]
 }

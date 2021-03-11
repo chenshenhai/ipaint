@@ -1,14 +1,14 @@
-import { TypeBrushPoint, TypePosition } from './../types/index';
+import { TypeBrushPoint, TypeDataPosition } from './../types/index';
 
 export class Brush {
 
   private _ctx: CanvasRenderingContext2D;
   private _brushPoint: TypeBrushPoint|null = null;
   private _inertanceNum: number;
-  private _positions: TypePosition[];
-  private _prevPosition: TypePosition|null;
+  private _positions: TypeDataPosition[];
+  private _prevPosition: TypeDataPosition|null;
   private _prevBrushSize: number = 0;
-  private _expectedNextPosition: TypePosition|null;
+  private _expectedNextPosition: TypeDataPosition|null;
   private _acceleration: number;
   private _prevVelocity: number;
   private _prevDistance: number;
@@ -30,7 +30,7 @@ export class Brush {
     this._velocityPressureCoff = 5;
   }
 
-  pushPosition(p: TypePosition) {
+  pushPosition(p: TypeDataPosition) {
     this._positions.push(p);
   }
 
@@ -103,12 +103,12 @@ export class Brush {
   }
 
 
-  getDistance(p0: TypePosition, p1: TypePosition) {
+  getDistance(p0: TypeDataPosition, p1: TypeDataPosition) {
     let distance = ((p1.x - p0.x) * (p1.x - p0.x)) + ((p1.y - p0.y) * (p1.y - p0.y));
     return (distance == 0) ? distance : Math.sqrt(distance);
   }
 
-  drawPath(ctx: CanvasRenderingContext2D, startPos: TypePosition, endPos: TypePosition, brushSize: number, distance: number) {
+  drawPath(ctx: CanvasRenderingContext2D, startPos: TypeDataPosition, endPos: TypeDataPosition, brushSize: number, distance: number) {
     if (!this._brushPoint) {
       return;
     }
@@ -127,7 +127,7 @@ export class Brush {
     }
   }
 
-  getInterlatePos(p0: TypePosition, p1: TypePosition, moveLen: number) {
+  getInterlatePos(p0: TypeDataPosition, p1: TypeDataPosition, moveLen: number) {
     let x = p0.x + (p1.x - p0.x) * moveLen;
     let y = p0.y + (p1.y - p0.y) * moveLen;
     return { x: x, y: y, t: 0, };
@@ -164,6 +164,14 @@ export class Brush {
       this._brushPoint.maxSize = size;
       this._brushPoint.minSize = 0;
     }
+  }
+
+  getBrushName(): string|undefined {
+    return this._brushPoint?.name;
+  }
+
+  getPositions() {
+    return [...[], ...this._positions];
   }
 
 }

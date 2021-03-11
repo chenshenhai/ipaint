@@ -1,4 +1,4 @@
-import { TypeIDraw, TypeData, TypePosition, TypeBrushOptions } from './types/index';
+import { TypeIDraw, TypeData, TypeDataPosition, TypeBrushOptions } from './types/index';
 import { Watcher } from './watcher/index';
 import { Brush } from './brush/index';
 import { loadImage } from './util/loader';
@@ -41,6 +41,12 @@ export default class IDraw implements TypeIDraw {
       brush.pushPosition(p);
       brush.drawEnd();
       brush.drawLine();
+      const positions = brush.getPositions();
+      const brushName = brush.getBrushName();
+      const size = this._currentSize;
+      if (typeof brushName === 'string') {
+        this._data.paths.push({ brush: brushName, size, positions, })
+      }
     });
     this._isStart = true;
   }
@@ -56,10 +62,9 @@ export default class IDraw implements TypeIDraw {
     this._brush.setSize(this._currentSize);
   }
 
-  drawPath(path: { positions: TypePosition[] }) {
+  drawPath(path: { positions: TypeDataPosition[] }) {
     const brush = this._brush;
     path.positions.forEach((p, i) => {
-
       if (i === 0) {
         brush.drawStart();
       } else if (i === path.positions.length - 1) {
@@ -74,7 +79,7 @@ export default class IDraw implements TypeIDraw {
     });
   }
 
-  async playPath(path: { positions: TypePosition[] }) {
+  async playPath(path: { positions: TypeDataPosition[] }) {
     const brush = this._brush;
     const middlewares: Function[] = [];
     path.positions.forEach((p, i) => {
@@ -110,10 +115,15 @@ export default class IDraw implements TypeIDraw {
   useBrush(name: string) {
     const image = this._patternMap[name];
     this._brush.setBrushPoint({
+      name,
       pattern: image,
       maxSize: this._currentSize,
       minSize: 0,
     });
+  }
+
+  getData() {
+    return this._data;
   }
 }
 

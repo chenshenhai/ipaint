@@ -1,4 +1,5 @@
 export type TypeBrushPoint = {
+  name: string;
   pattern: HTMLImageElement | HTMLCanvasElement,
   maxSize: number;
   minSize: number;
