@@ -1,8 +1,11 @@
-import { TypeIDraw, TypeData, TypeDataPosition, TypeBrushOptions } from './types/index';
+import { TypeIDraw, TypeData, TypeBrushOptions } from './types/index';
 import { Watcher } from './watcher/index';
 import { Brush } from './brush/index';
 import { loadImage } from './util/loader';
-import { compose, delay } from './util/task';
+import {
+  compose,
+  delay,
+} from './util/task';
 
 export default class IDraw implements TypeIDraw {
 
@@ -62,35 +65,18 @@ export default class IDraw implements TypeIDraw {
     this._brush.setSize(this._currentSize);
   }
 
-  drawPath(path: { positions: TypeDataPosition[] }) {
+  async draw(data: TypeData): Promise<void> {
     const brush = this._brush;
-    path.positions.forEach((p, i) => {
-      if (i === 0) {
-        brush.drawStart();
-      } else if (i === path.positions.length - 1) {
-        brush.pushPosition(p);
-        brush.drawEnd();
-      } else {
-        brush.pushPosition(p);
-      }
-      if (i > 0) {
-        brush.drawLine();
-      }
+    const brushTasks: Promise<any>[] = []
+    Object.keys(data.brushMap).forEach((name) => {
+      brushTasks.push(this.loadBrush(data.brushMap[name]))
     });
-  }
 
-  async playPath(path: { positions: TypeDataPosition[] }) {
-    const brush = this._brush;
-    const middlewares: Function[] = [];
-    path.positions.forEach((p, i) => {
-      middlewares.push(async (ctx: any, next: Function) => {
-        let time = 0;
-        if (i > 0) {
-          const prev = path.positions[i - 1];
-          time = p.t - prev.t;
-        }
-        await delay(time);
-
+    await Promise.all(brushTasks);
+    data.paths.forEach(async (path) => {
+      this.useBrush(path.brush);
+      this.setBrushSize(path.size);
+      path.positions.forEach((p, i) => {
         if (i === 0) {
           brush.drawStart();
         } else if (i === path.positions.length - 1) {
@@ -102,16 +88,58 @@ export default class IDraw implements TypeIDraw {
         if (i > 0) {
           brush.drawLine();
         }
+      });
+    });
+  }
+
+  async play(data: TypeData): Promise<void> {
+    const brush = this._brush;
+    const brushTasks: Promise<any>[] = []
+    Object.keys(data.brushMap).forEach((name) => {
+      brushTasks.push(this.loadBrush(data.brushMap[name]))
+    });
+    await Promise.all(brushTasks);
+    const playTasks: Function[] = [];
+    data.paths.forEach(async (path) => {
+      const drawTasks: Function[] = [];
+      drawTasks.push(async (ctx: any, next: Function) => {
+        this.useBrush(path.brush);
+        this.setBrushSize(path.size);
+        await next();
+      })
+      path.positions.forEach(async (p, i) => {
+        drawTasks.push(async (ctx: any, next: Function) => {
+          if (i === 0) {
+            brush.drawStart();
+          } else if (i === path.positions.length - 1) {
+            brush.pushPosition(p);
+            brush.drawEnd();
+          } else {
+            brush.pushPosition(p);
+          }
+          if (i > 0) {
+            brush.drawLine();
+          }
+
+          let time = 1;
+          if (i > 0) {
+            const prevP = path.positions[i - 1];
+            time = Math.max(p.t - prevP.t, 1)
+          }
+          await delay(time);
+          await next();
+        });
+      });
+
+      playTasks.push(async (ctx: any, next: Function) => {
+        await compose(drawTasks)({});
         await next();
       })
     });
-    try {
-      await compose(middlewares)({});
-    } catch (err) {
-      console.log(err);
-    }
+    await compose(playTasks)({});
   }
 
+  
   useBrush(name: string) {
     const image = this._patternMap[name];
     this._brush.setBrushPoint({

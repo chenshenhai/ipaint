@@ -3,8 +3,8 @@ import { TypeData, TypeDataPosition } from './data';
 
 export interface TypeIDraw {
   start(): void;
-  drawPath(path: { positions: TypeDataPosition[] }): void;
-  playPath(path: { positions: TypeDataPosition[] }): Promise<void>;
+  draw(data: TypeData): Promise<void>
+  play(data: TypeData): Promise<void>
   
   loadBrush(opts: TypeBrushOptions): Promise<void>;
   setBrushSize(size: number): void;

@@ -1,4 +1,4 @@
-import path from './data/path.js';
+import data from './data.js';
 import { src } from '../draw/brush/basic.js';
 
 const { IDraw } = window;
@@ -11,8 +11,6 @@ async function main() {
     src: src,
     size: 20,
   });
-  await iDraw.drawPath({
-    positions: path.positions
-  });
+  await iDraw.draw(data);
 }
 main();

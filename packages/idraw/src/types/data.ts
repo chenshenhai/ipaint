@@ -4,7 +4,7 @@ export type TypeData = {
 }
 
 export type TypeDataBrush = {
-  name?: string;
+  name: string;
   src: string;
 }
 
