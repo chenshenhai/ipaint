@@ -1,6 +1,6 @@
 {
   "name": "@idraw/core",
-  "version": "0.0.2-0.0.1-alpha.0.0",
+  "version": "0.0.2-0.0.1-alpha.1.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,5 +12,8 @@
   "files": [
     "dist",
     "index.js"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
