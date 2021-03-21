@@ -27,6 +27,6 @@
     "index.js"
   ],
   "dependencies": {
-    "@idraw/types": "^0.0.0"
+    "@idraw/types": "^0.0.1"
   }
 }
