@@ -10,6 +10,11 @@ const modules = [
     input: resolveFile(['idraw', 'src', 'index.ts']),
     output: resolveFile(['idraw', 'dist', 'index.js']),
     name: 'IDraw',
+  },
+  {
+    input: resolveFile(['core', 'src', 'index.ts']),
+    output: resolveFile(['core', 'dist', 'index.js']),
+    name: 'IDrawCore',
   }
 ];
 

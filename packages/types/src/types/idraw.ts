@@ -1,5 +1,5 @@
 import { TypeBrushOptions } from './brush';
-import { TypeData, TypeDataPosition } from './data';
+import { TypeData } from './data';
 
 export interface TypeIDraw {
   start(): void;

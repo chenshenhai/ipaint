@@ -1,4 +1,4 @@
-import { TypeIDraw, TypeData, TypeBrushOptions } from './types/index';
+import { TypeIDraw, TypeData, TypeBrushOptions } from '@idraw/types';
 import { Watcher } from './watcher/index';
 import { Brush } from './brush/index';
 import { loadImage } from './util/loader';

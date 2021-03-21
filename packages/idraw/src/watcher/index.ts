@@ -1,7 +1,7 @@
 import {
   TypeWatcher,
   TypeWatchCallback,
-} from './../types/index';
+} from '@idraw/types';
 
 export class Watcher implements TypeWatcher {
 

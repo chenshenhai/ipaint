@@ -25,5 +25,8 @@
   "files": [
     "dist",
     "index.js"
-  ]
+  ],
+  "dependencies": {
+    "@idraw/types": "^0.0.0"
+  }
 }

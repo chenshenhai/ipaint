@@ -1,4 +1,4 @@
-import { TypeBrushPoint, TypeDataPosition } from './../types/index';
+import { TypeBrushPoint, TypeDataPosition } from '@idraw/types';
 
 export class Brush {
 
