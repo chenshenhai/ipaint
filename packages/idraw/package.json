@@ -1,6 +1,6 @@
 {
   "name": "idraw",
-  "version": "0.0.2-0.0.1-alpha.1.0",
+  "version": "0.0.2",
   "description": "a draw lib",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,7 +27,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@idraw/types": "^0.0.2-0.0.1-alpha.1.0"
+    "@idraw/types": "^0.0.2"
   },
   "gitHead": "84fa9be6a10b8be043cf92b7412568de9140cbb1"
 }
