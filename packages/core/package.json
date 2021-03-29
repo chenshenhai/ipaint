@@ -15,5 +15,8 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@idraw/types": "^0.0.2"
   }
 }
