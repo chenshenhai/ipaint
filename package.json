@@ -8,7 +8,8 @@
     "e2e": "node ./scripts/build.js && mocha --exit ./__tests__/e2e.test.js",
     "serve": "http-server",
     "start": "npm run serve & npm run dev",
-    "init": "lerna bootstrap --npm-client=cnpm"
+    "init": "lerna bootstrap --npm-client=cnpm",
+    "test": "lerna bootstrap --no-ci && lerna run build && npm run e2e"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.13.2",
