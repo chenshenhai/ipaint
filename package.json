@@ -9,7 +9,7 @@
     "serve": "http-server",
     "start": "npm run serve & npm run dev",
     "init": "lerna bootstrap --npm-client=cnpm",
-    "test": "lerna bootstrap --no-ci && lerna run build && npm run e2e"
+    "test": "lerna bootstrap --no-ci && npm run build && npm run e2e"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.13.2",
