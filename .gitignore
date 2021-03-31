@@ -108,4 +108,4 @@ dist
 temp
 
 __tests__/diff
-__tests__/snapshot
+# __tests__/snapshot
