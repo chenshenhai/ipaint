@@ -1,33 +1,43 @@
-
-import { createBrushPoint } from './pattern.js';
+import { TypeBrushPoint, TypeDataPosition } from '@idraw/types';
 
 export class Brush {
+
+  private _ctx: CanvasRenderingContext2D;
+  private _brushPoint: TypeBrushPoint|null = null;
+  private _inertanceNum: number;
+  private _positions: TypeDataPosition[];
+  private _prevPosition: TypeDataPosition|null;
+  private _prevBrushSize: number = 0;
+  private _expectedNextPosition: TypeDataPosition|null;
+  private _acceleration: number;
+  private _prevVelocity: number;
+  private _prevDistance: number;
+
+  private _velocityPressureCoff: number;
   
-  constructor(ctx) {
+  constructor(ctx: CanvasRenderingContext2D) {
     this._ctx = ctx;
-    this._brushPoint = createBrushPoint();
 
     this._inertanceNum = 10;
     this._positions = [];
     this._prevPosition = null;
-    this._prevBrushSize = null;
     this._expectedNextPosition = null;
     this._acceleration = 0;
     this._prevVelocity = 0;
     this._prevDistance = 0;
     
-    // xxx
-    this.velocityPressureCoff = 5;
+    // TODO
+    this._velocityPressureCoff = 5;
   }
 
-  pushPosition(p) {
+  pushPosition(p: TypeDataPosition) {
     this._positions.push(p);
   }
 
   drawStart() {
     this._positions = [];
     this._prevPosition = null;
-    this._prevBrushSize = null;
+    this._prevBrushSize = 0;
     this._prevVelocity = 0;
     this._prevDistance = 0;
     this._expectedNextPosition = null;
@@ -37,10 +47,10 @@ export class Brush {
   drawEnd() {
     if (this._acceleration > 1) {
       let pos = {
-        x: this._expectedNextPosition.x,
-        y: this._expectedNextPosition.y,
-        t: (this._acceleration / (this._prevDistance * this._prevVelocity)) + this._prevPosition.t,
-        p: this._prevPosition.p * Math.min(this._acceleration / (this._prevDistance * this._prevVelocity), 1)
+        x: this._expectedNextPosition?.x || 0,
+        y: this._expectedNextPosition?.y || 0,
+        t: (this._acceleration / (this._prevDistance * this._prevVelocity)) + (this._prevPosition?.t || 0),
+        // p: this._prevPosition?.p * Math.min(this._acceleration / (this._prevDistance * this._prevVelocity), 1)
       };
       for (let i = 0, n = this._inertanceNum; i < n; i++) {
         this._positions.push(pos);
@@ -52,6 +62,9 @@ export class Brush {
   }
 
   drawLine() {
+    if (!this._brushPoint) {
+      return;
+    }
     const ctx = this._ctx;
     let pos = this.getBufferedCurrentPosition();
     if (pos == null) return;
@@ -64,24 +77,21 @@ export class Brush {
     let distance = this.getDistance(pos, this._prevPosition);
     let velocity = distance / Math.max(1, t);
     let acceleration = (this._prevVelocity == 0) ? 0 : velocity / this._prevVelocity;
-    const curve = function(t, b, c, d) {
+    const curve = function(t: number, b: number, c: number, d: number) {
       return c * t / d + b;
     }
-    let brushSize = Math.max(this._brushPoint.minSize,
+    let brushSize = Math.max(
+      this._brushPoint.minSize,
       curve(
         velocity,
         this._brushPoint.maxSize,
         (0 - this._brushPoint.maxSize) - this._brushPoint.minSize,
-        this.velocityPressureCoff
+        this._velocityPressureCoff
       )
     );
-    if (pos.p > 0) {
-      brushSize = Math.max(this._brushPoint.minSize, this._brushPoint.maxSize * pos.p);
-    }
-
     
     ctx.save();
-    this.drawPath(ctx, this._prevPosition, pos, brushSize, distance, velocity);
+    this.drawPath(ctx, this._prevPosition, pos, brushSize, distance);
     ctx.restore();
 
     this._acceleration = acceleration;
@@ -93,33 +103,34 @@ export class Brush {
   }
 
 
-  getDistance(p0, p1) {
+  getDistance(p0: TypeDataPosition, p1: TypeDataPosition) {
     let distance = ((p1.x - p0.x) * (p1.x - p0.x)) + ((p1.y - p0.y) * (p1.y - p0.y));
     return (distance == 0) ? distance : Math.sqrt(distance);
   }
 
-  drawPath(ctx, startPos, endPos, brushSize, distance) {
+  drawPath(ctx: CanvasRenderingContext2D, startPos: TypeDataPosition, endPos: TypeDataPosition, brushSize: number, distance: number) {
+    if (!this._brushPoint) {
+      return;
+    }
     let t = 0;
-    let brushDelta = (brushSize - this._prevBrushSize);
+    let brushDelta = (brushSize - (this._prevBrushSize || 0));
   
     while (t < 1) {
-      let brushSizeCur = Math.min(this._prevBrushSize + (brushDelta * t), this._brushPoint.maxSize);
+      let brushSizeCur = Math.min((this._prevBrushSize || 0) + (brushDelta * t), this._brushPoint.maxSize);
       let pos = this.getInterlatePos(startPos, endPos, t);
       if (Math.random() > 0.2) {
         let px = pos.x;
         let py = pos.y;
         ctx.drawImage(this._brushPoint.pattern, px, py, brushSizeCur, brushSizeCur);
-        
       }
       t += 1 / distance;
     }
   }
 
-  getInterlatePos(p0, p1, moveLen) {
+  getInterlatePos(p0: TypeDataPosition, p1: TypeDataPosition, moveLen: number) {
     let x = p0.x + (p1.x - p0.x) * moveLen;
     let y = p0.y + (p1.y - p0.y) * moveLen;
-  
-    return { x: x, y: y };
+    return { x: x, y: y, t: 0, };
   }
 
   getBufferedCurrentPosition() {
@@ -135,14 +146,32 @@ export class Brush {
       pos.x += p.x;
       pos.y += p.y;
       pos.t += p.t;
-      pos.p += p.p;
     }
   
     pos.x /= inertanceNum;
     pos.y /= inertanceNum;
     pos.t /= inertanceNum;
-    pos.p /= inertanceNum;
   
     return pos;
   }
+
+  setBrushPoint(brush: TypeBrushPoint) {
+    this._brushPoint = brush;
+  }
+
+  setSize(size: number) {
+    if (this._brushPoint) {
+      this._brushPoint.maxSize = size;
+      this._brushPoint.minSize = 0;
+    }
+  }
+
+  getBrushName(): string|undefined {
+    return this._brushPoint?.name;
+  }
+
+  getPositions() {
+    return [...[], ...this._positions];
+  }
+
 }

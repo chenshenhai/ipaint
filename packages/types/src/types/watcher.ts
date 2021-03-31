@@ -1,4 +1,4 @@
-import { TypePosition } from './position';
+import { TypeDataPosition } from './data';
 
 export interface TypeWatcher {
 
@@ -10,4 +10,4 @@ export interface TypeWatcher {
 }
 
 
-export type TypeWatchCallback = (p: TypePosition) => void
+export type TypeWatchCallback = (p: TypeDataPosition) => void

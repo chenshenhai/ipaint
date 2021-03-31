@@ -1,8 +1,9 @@
 {
   "name": "idraw",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "a draw lib",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "rollup -w -c ./scripts/rollup.config.dev.js",
     "build": "rollup -c ./scripts/rollup.config.prod.js"
@@ -21,16 +22,12 @@
     "url": "https://github.com/chenshenhai/idraw/issues"
   },
   "homepage": "https://github.com/chenshenhai/idraw#readme",
-  "devDependencies": {
-    "@rollup/plugin-buble": "^0.21.3",
-    "rollup": "^2.39.1",
-    "rollup-plugin-serve": "^1.1.0",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "rollup-plugin-uglify": "^6.0.4",
-    "typescript": "^4.2.2"
-  },
   "files": [
     "dist",
     "index.js"
-  ]
+  ],
+  "dependencies": {
+    "@idraw/types": "^0.0.2"
+  },
+  "gitHead": "84fa9be6a10b8be043cf92b7412568de9140cbb1"
 }

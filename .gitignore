@@ -104,3 +104,8 @@ dist
 .tern-port
 
 .DS_Store
+
+temp
+
+__tests__/diff
+__tests__/snapshot
