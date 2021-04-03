@@ -2,7 +2,8 @@
   "packages": [
     "packages/idraw",
     "packages/types",
-    "packages/core"
+    "packages/core",
+    "packages/brush"
   ],
   "version": "0.0.2"
 }

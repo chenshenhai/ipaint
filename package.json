@@ -6,9 +6,8 @@
     "build": "node ./scripts/build.js",
     "snapshot": "node ./scripts/build.js && node ./scripts/snapshot.js",
     "e2e": "node ./scripts/build.js && mocha --exit ./__tests__/e2e.test.js",
-    "serve": "http-server",
-    "start": "npm run serve & npm run dev",
     "init": "lerna bootstrap --npm-client=cnpm",
+    "clear": "rm -rf ./packages/*/node_modules/",
     "test": "lerna bootstrap --no-ci && npm run build && npm run e2e"
   },
   "devDependencies": {

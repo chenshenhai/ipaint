@@ -1,6 +1,6 @@
 import { TypeBrushPoint, TypeDataPosition } from '@idraw/types';
 
-export class Brush {
+export default class Brush {
 
   private _ctx: CanvasRenderingContext2D;
   private _brushPoint: TypeBrushPoint|null = null;

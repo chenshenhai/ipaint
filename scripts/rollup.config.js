@@ -15,6 +15,11 @@ const modules = [
     input: resolveFile(['core', 'src', 'index.ts']),
     output: resolveFile(['core', 'dist', 'index.js']),
     name: 'IDrawCore',
+  },
+  {
+    input: resolveFile(['brush', 'src', 'index.ts']),
+    output: resolveFile(['brush', 'dist', 'index.js']),
+    name: 'IDrawBrush',
   }
 ];
 
