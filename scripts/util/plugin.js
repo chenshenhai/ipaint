@@ -8,7 +8,6 @@ module.exports = function myPlugin(pkgName) {
   return {
     name: 'my-plugin', // this name will show up in warnings and errors
     async closeBundle() {
-      console.log(`------------ ${pkgName} closeBundle ---------`)
 
       // build types
       const target = pkgName;

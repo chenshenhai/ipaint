@@ -1,4 +1,3 @@
-import "./../../../brush/dist/index.js";
 import data from './data.js';
 
 const { IDraw, IDrawBrush } = window;

@@ -1,5 +1,3 @@
-import "./../../../brush/dist/index.js";
-
 const { IDraw, IDrawBrush } = window;
 const { ink } = IDrawBrush;
 
