@@ -1,30 +1,23 @@
 const path = require('path');
 const typescript = require('rollup-plugin-typescript2');
+const { packages } = require('./config');
+const plugin = require('./util/plugin');
 
 const resolveFile = function(names = []) {
   return path.join(__dirname, '..', 'packages', ...names)
 }
 
-const modules = [
-  {
-    input: resolveFile(['idraw', 'src', 'index.ts']),
-    output: resolveFile(['idraw', 'dist', 'index.js']),
-    name: 'IDraw',
-  },
-  {
-    input: resolveFile(['core', 'src', 'index.ts']),
-    output: resolveFile(['core', 'dist', 'index.js']),
-    name: 'IDrawCore',
-  },
-  {
-    input: resolveFile(['brush', 'src', 'index.ts']),
-    output: resolveFile(['brush', 'dist', 'index.js']),
-    name: 'IDrawBrush',
+const modules = packages.map((pkg) => {
+  return {
+    input: resolveFile([pkg.dirName, 'src', 'index.ts']),
+    output: resolveFile([pkg.dirName, 'dist', 'index.js']),
+    name: pkg.globalName,
+    plugins: [plugin(pkg.dirName)]
   }
-];
+});
 
 function createConfigItem(params) {
-  const { input, output, name, } = params;
+  const { input, output, name, plugins = []} = params;
   return {
     input: input,
     output: {
@@ -35,7 +28,8 @@ function createConfigItem(params) {
       sourcemap: true,
     }, 
     plugins: [
-      typescript(),
+      ...[typescript()],
+      ...plugins,
     ],
   };
 }

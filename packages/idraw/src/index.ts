@@ -1,11 +1,10 @@
 import { TypeIDraw, TypeData, TypeBrushOptions } from '@idraw/types';
 import { Watcher } from './watcher/index';
 import { Brush } from './brush/index';
-import { loadImage } from './util/loader';
-import {
-  compose,
-  delay,
-} from './util/task';
+import util from '@idraw/util';
+
+const { loadImage } = util.loader;
+const { compose,   delay, } = util.time;
 
 export default class IDraw implements TypeIDraw {
 

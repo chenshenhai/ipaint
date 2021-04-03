@@ -27,7 +27,8 @@
     "index.js"
   ],
   "dependencies": {
-    "@idraw/types": "^0.0.2"
+    "@idraw/types": "^0.0.2",
+    "@idraw/util": "^0.0.2"
   },
   "gitHead": "84fa9be6a10b8be043cf92b7412568de9140cbb1"
 }
