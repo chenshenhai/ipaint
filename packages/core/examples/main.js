@@ -10,7 +10,7 @@ async function main() {
   const image = await IDrawUtil.loader.loadImage(data.brushMap.ink.src);
   
   data.paths.forEach(async (path) => {
-    core.setBrushPoint({
+    core.setBrush({
       name: 'ink',
       pattern: image,
       maxSize: path.size,

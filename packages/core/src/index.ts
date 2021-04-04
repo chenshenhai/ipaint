@@ -30,11 +30,30 @@ export default class Core {
     this._velocityPressureCoff = 5;
   }
 
-  pushPosition(p: TypeDataPosition) {
+  public setBrush(brush: TypeBrushPoint) {
+    this._brushPoint = brush;
+  }
+
+  public setSize(size: number) {
+    if (this._brushPoint) {
+      this._brushPoint.maxSize = size;
+      this._brushPoint.minSize = 0;
+    }
+  }
+
+  public getBrushName(): string|undefined {
+    return this._brushPoint?.name;
+  }
+
+  public getPositions() {
+    return [...[], ...this._positions];
+  }
+
+  public pushPosition(p: TypeDataPosition) {
     this._positions.push(p);
   }
 
-  drawStart() {
+  public drawStart() {
     this._positions = [];
     this._prevPosition = null;
     this._prevBrushSize = 0;
@@ -44,7 +63,7 @@ export default class Core {
     this._acceleration = 0;
   }
 
-  drawEnd() {
+  public drawEnd() {
     if (this._acceleration > 1) {
       let pos = {
         x: this._expectedNextPosition?.x || 0,
@@ -61,12 +80,12 @@ export default class Core {
     }
   }
 
-  drawLine() {
+  public drawLine() {
     if (!this._brushPoint) {
       return;
     }
     const ctx = this._ctx;
-    let pos = this.getBufferedCurrentPosition();
+    let pos = this._getBufferedCurrentPosition();
     if (pos == null) return;
 
     if (this._prevPosition == null) {
@@ -74,7 +93,7 @@ export default class Core {
     }
     
     let t = (pos.t - this._prevPosition.t);
-    let distance = this.getDistance(pos, this._prevPosition);
+    let distance = this._getDistance(pos, this._prevPosition);
     let velocity = distance / Math.max(1, t);
     let acceleration = (this._prevVelocity == 0) ? 0 : velocity / this._prevVelocity;
     const curve = function(t: number, b: number, c: number, d: number) {
@@ -91,11 +110,11 @@ export default class Core {
     );
     
     ctx.save();
-    this.drawPath(ctx, this._prevPosition, pos, brushSize, distance);
+    this._drawPath(ctx, this._prevPosition, pos, brushSize, distance);
     ctx.restore();
 
     this._acceleration = acceleration;
-    this._expectedNextPosition = this.getInterlatePos(this._prevPosition, pos, 1 + this._acceleration);
+    this._expectedNextPosition = this._getInterlatePos(this._prevPosition, pos, 1 + this._acceleration);
     this._prevPosition = pos;
     this._prevBrushSize = brushSize;
     this._prevVelocity = velocity;
@@ -103,12 +122,12 @@ export default class Core {
   }
 
 
-  getDistance(p0: TypeDataPosition, p1: TypeDataPosition) {
-    let distance = ((p1.x - p0.x) * (p1.x - p0.x)) + ((p1.y - p0.y) * (p1.y - p0.y));
-    return (distance == 0) ? distance : Math.sqrt(distance);
+  private _getDistance(start: TypeDataPosition, end: TypeDataPosition) {
+    let distance = ((start.x - end.x) * (start.x - end.x)) + ((start.y - end.y) * (start.y - end.y));
+    return (distance === 0) ? distance : Math.sqrt(distance);
   }
 
-  drawPath(ctx: CanvasRenderingContext2D, startPos: TypeDataPosition, endPos: TypeDataPosition, brushSize: number, distance: number) {
+  private _drawPath(ctx: CanvasRenderingContext2D, startPos: TypeDataPosition, endPos: TypeDataPosition, brushSize: number, distance: number) {
     if (!this._brushPoint) {
       return;
     }
@@ -117,7 +136,7 @@ export default class Core {
   
     while (t < 1) {
       let brushSizeCur = Math.min((this._prevBrushSize || 0) + (brushDelta * t), this._brushPoint.maxSize);
-      let pos = this.getInterlatePos(startPos, endPos, t);
+      let pos = this._getInterlatePos(startPos, endPos, t);
       if (Math.random() > 0.2) {
         let px = pos.x;
         let py = pos.y;
@@ -127,13 +146,13 @@ export default class Core {
     }
   }
 
-  getInterlatePos(p0: TypeDataPosition, p1: TypeDataPosition, moveLen: number) {
-    let x = p0.x + (p1.x - p0.x) * moveLen;
-    let y = p0.y + (p1.y - p0.y) * moveLen;
+  private _getInterlatePos(start: TypeDataPosition, end: TypeDataPosition, moveLen: number) {
+    let x = start.x + (end.x - start.x) * moveLen;
+    let y = start.y + (end.y - start.y) * moveLen;
     return { x: x, y: y, t: 0, };
   }
 
-  getBufferedCurrentPosition() {
+  private _getBufferedCurrentPosition() {
     let pos = { x: 0, y: 0, t: 0};
     let inertanceNum = Math.min(this._inertanceNum, this._positions.length);
   
@@ -153,25 +172,6 @@ export default class Core {
     pos.t /= inertanceNum;
   
     return pos;
-  }
-
-  setBrushPoint(brush: TypeBrushPoint) {
-    this._brushPoint = brush;
-  }
-
-  setSize(size: number) {
-    if (this._brushPoint) {
-      this._brushPoint.maxSize = size;
-      this._brushPoint.minSize = 0;
-    }
-  }
-
-  getBrushName(): string|undefined {
-    return this._brushPoint?.name;
-  }
-
-  getPositions() {
-    return [...[], ...this._positions];
   }
 
 }
