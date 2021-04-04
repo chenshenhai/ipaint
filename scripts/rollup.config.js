@@ -26,7 +26,7 @@ for(let i = 0; i < packages.length; i++) {
     format: 'cjs',
     exports: 'default',
     plugins: [plugin(pkg.dirName)],
-    external: [ '@draw/util' ]
+    external: [ '@draw/util', '@draw/core' ]
   });
   modules.push({
     input: resolveFile([pkg.dirName, 'src', 'index.ts']),

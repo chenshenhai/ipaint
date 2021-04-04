@@ -29,6 +29,7 @@
     "index.js"
   ],
   "dependencies": {
+    "@idraw/core": "^0.0.2",
     "@idraw/types": "^0.0.2",
     "@idraw/util": "^0.0.2"
   },

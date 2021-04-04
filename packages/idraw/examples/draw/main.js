@@ -14,6 +14,7 @@ async function main() {
   btn.addEventListener('click', () => {
     const data = iDraw.getData();
     console.log(data);
+    console.log(JSON.stringify(data));
   }, false);
 }
 

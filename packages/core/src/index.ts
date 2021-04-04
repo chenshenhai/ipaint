@@ -50,7 +50,10 @@ export default class Core {
   }
 
   public pushPosition(p: TypeDataPosition) {
-    this._positions.push(p);
+    if (this._isVaildPosition(p)) {
+      
+      this._positions.push(p);
+    }
   }
 
   public drawStart() {
@@ -72,7 +75,8 @@ export default class Core {
         // p: this._prevPosition?.p * Math.min(this._acceleration / (this._prevDistance * this._prevVelocity), 1)
       };
       for (let i = 0, n = this._inertanceNum; i < n; i++) {
-        this._positions.push(pos);
+        // this._positions.push(pos);
+        this.pushPosition(pos);
       }
       if (this._positions.length >= 2) {
         this.drawLine();
@@ -137,11 +141,11 @@ export default class Core {
     while (t < 1) {
       let brushSizeCur = Math.min((this._prevBrushSize || 0) + (brushDelta * t), this._brushPoint.maxSize);
       let pos = this._getInterlatePos(startPos, endPos, t);
-      if (Math.random() > 0.2) {
+      // if (Math.random() > 0.2) {
         let px = pos.x;
         let py = pos.y;
         ctx.drawImage(this._brushPoint.pattern, px, py, brushSizeCur, brushSizeCur);
-      }
+      // }
       t += 1 / distance;
     }
   }
@@ -172,6 +176,10 @@ export default class Core {
     pos.t /= inertanceNum;
   
     return pos;
+  }
+
+  private _isVaildPosition(p: TypeDataPosition) {
+    return ( p.x > 0 && p.y > 0 && p.t > 0)
   }
 
 }
