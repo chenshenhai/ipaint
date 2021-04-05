@@ -1,6 +1,7 @@
 import {
   TypeWatcher,
   TypeWatchCallback,
+  TypeDataPosition,
 } from '@idraw/types';
 
 export class Watcher implements TypeWatcher {
@@ -35,6 +36,10 @@ export class Watcher implements TypeWatcher {
     canvas.addEventListener('mousemove', this._onMove.bind(this));
     canvas.addEventListener('mouseup', this._onEnd.bind(this));
 
+    canvas.addEventListener('touchstart', this._onStart.bind(this));
+    canvas.addEventListener('touchmove', this._onMove.bind(this));
+    canvas.addEventListener('touchend', this._onEnd.bind(this));
+
     const mouseupEvent = new MouseEvent('mouseup');
     document.querySelector('body')?.addEventListener('mousemove', (e) => {
       // @ts-ignore
@@ -46,41 +51,67 @@ export class Watcher implements TypeWatcher {
     }, false)
   }
 
-  _onStart(e: MouseEvent) {
+  _onStart(e: MouseEvent|TouchEvent) {
+    e.preventDefault();
     this._isPainting = true;
     if (typeof this._onDrawStart === 'function') {
       const p = this._getPosition(e);
-      this._onDrawStart(p);
-    }
-  }
-  
-  _onMove(e: MouseEvent) {
-    if (this._isPainting === true) {
-      if (typeof this._onDraw === 'function') { 
-        const p = this._getPosition(e);
-        this._onDraw(p);
+      if (this._isVaildPosition(p)) {
+        this._onDrawStart(p);
       }
     }
   }
   
-  _onEnd(e: MouseEvent) {
+  _onMove(e: MouseEvent|TouchEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (this._isPainting === true) {
+      if (typeof this._onDraw === 'function') {
+        const p = this._getPosition(e);
+        if (this._isVaildPosition(p)) {
+          this._onDraw(p);
+        }
+      }
+    }
+  }
+  
+  _onEnd(e: MouseEvent|TouchEvent) {
+    e.preventDefault();
     this._isPainting = false;
     if (typeof this._onDrawEnd === 'function') {
       const p = this._getPosition(e);
-      this._onDrawEnd(p);
+      if (this._isVaildPosition(p)) {
+        this._onDrawEnd(p);
+      }
     }
   }
 
-  _getPosition(e: MouseEvent) {
+  _getPosition(e: MouseEvent|TouchEvent) {
     const canvas = this._canvas;
-    const x = e.clientX;
-    const y = e.clientY;
+    let x = 0;
+    let y = 0;
+
+    if (e instanceof TouchEvent) {
+      const touch: Touch = e.touches[0];
+      if (touch) {
+        x = touch.clientX;
+        y = touch.clientY;
+      }
+    } else {
+      x = e.clientX;
+      y = e.clientY;
+    }
+
     const p = {
       x: x - canvas.getBoundingClientRect().left,
       y: y - canvas.getBoundingClientRect().top,
       t: Date.now(),
     };
     return p;
+  }
+
+  private _isVaildPosition(p: TypeDataPosition) {
+    return ( p.x > 0 && p.y > 0 && p.t > 0)
   }
   
 }

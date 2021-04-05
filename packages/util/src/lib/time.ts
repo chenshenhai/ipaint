@@ -29,17 +29,3 @@ export function delay(time: number): Promise<void> {
   })
 }
 
-// export function compose(list: Function[]) {
-//   return function(ctx: any) {
-//     return dispatch(0);
-//     function dispatch(i: number) {
-//       const fn = list[i];
-//       if (!fn) {
-//         return Promise.resolve();
-//       }
-//       return Promise.resolve(fn(ctx, async () => {
-//         return dispatch(i + 1);
-//       }))
-//     }
-//   }
-// }

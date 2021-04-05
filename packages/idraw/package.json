@@ -2,7 +2,9 @@
   "name": "idraw",
   "version": "0.0.2",
   "description": "a draw lib",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "unpkg": "dist/index.global.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "rollup -w -c ./scripts/rollup.config.dev.js",
@@ -27,7 +29,9 @@
     "index.js"
   ],
   "dependencies": {
-    "@idraw/types": "^0.0.2"
+    "@idraw/core": "^0.0.2",
+    "@idraw/types": "^0.0.2",
+    "@idraw/util": "^0.0.2"
   },
   "gitHead": "84fa9be6a10b8be043cf92b7412568de9140cbb1"
 }

@@ -1,28 +1,28 @@
 import { TypeIDraw, TypeData, TypeBrushOptions } from '@idraw/types';
 import { Watcher } from './watcher/index';
-import { Brush } from './brush/index';
-import { loadImage } from './util/loader';
-import {
-  compose,
-  delay,
-} from './util/task';
+import util from '@idraw/util';
+import Core from '@idraw/core';
+
+const { loadImage } = util.loader;
+const { compose,   delay, } = util.time;
 
 export default class IDraw implements TypeIDraw {
 
   private _canvas: HTMLCanvasElement;
   private _context: CanvasRenderingContext2D
   private _watcher: Watcher;
-  private _brush: Brush;
+  private _core: Core;
   private _isStart: boolean = false;
   private _data: TypeData;
   private _patternMap: {[name: string]: HTMLImageElement | HTMLCanvasElement} = {};
   private _currentSize: number = 10;
 
+
   constructor(canvas: HTMLCanvasElement) {
     this._canvas = canvas;
     this._context = canvas.getContext('2d') as CanvasRenderingContext2D;
     this._watcher = new Watcher(this._canvas);
-    this._brush = new Brush(this._context);
+    this._core = new Core(this._context);
     this._data = { brushMap: {}, paths: [] };
     // this._patternMap: 
   }
@@ -32,20 +32,20 @@ export default class IDraw implements TypeIDraw {
       return;
     }
     const watcher = this._watcher;
-    const brush = this._brush;
+    const core = this._core;
     watcher.onDrawStart((p) => {
-      brush.drawStart()
+      core.drawStart()
     });
     watcher.onDraw((p) => {
-      brush.pushPosition(p);
-      brush.drawLine();
+      core.pushPosition(p);
+      core.drawLine();
     });
     watcher.onDrawEnd((p) => {
-      brush.pushPosition(p);
-      brush.drawEnd();
-      brush.drawLine();
-      const positions = brush.getPositions();
-      const brushName = brush.getBrushName();
+      core.pushPosition(p);
+      core.drawEnd();
+      core.drawLine();
+      const positions = core.getPositions();
+      const brushName = core.getBrushName();
       const size = this._currentSize;
       if (typeof brushName === 'string') {
         this._data.paths.push({ brush: brushName, size, positions, })
@@ -62,11 +62,11 @@ export default class IDraw implements TypeIDraw {
 
   setBrushSize(size: number) {
     this._currentSize = size;
-    this._brush.setSize(this._currentSize);
+    this._core.setSize(this._currentSize);
   }
 
   async draw(data: TypeData): Promise<void> {
-    const brush = this._brush;
+    const core = this._core;
     const brushTasks: Promise<any>[] = []
     Object.keys(data.brushMap).forEach((name) => {
       brushTasks.push(this.loadBrush(data.brushMap[name]))
@@ -78,22 +78,22 @@ export default class IDraw implements TypeIDraw {
       this.setBrushSize(path.size);
       path.positions.forEach((p, i) => {
         if (i === 0) {
-          brush.drawStart();
+          core.drawStart();
         } else if (i === path.positions.length - 1) {
-          brush.pushPosition(p);
-          brush.drawEnd();
+          core.pushPosition(p);
+          core.drawEnd();
         } else {
-          brush.pushPosition(p);
+          core.pushPosition(p);
         }
         if (i > 0) {
-          brush.drawLine();
+          core.drawLine();
         }
       });
     });
   }
 
   async play(data: TypeData): Promise<void> {
-    const brush = this._brush;
+    const core = this._core;
     const brushTasks: Promise<any>[] = []
     Object.keys(data.brushMap).forEach((name) => {
       brushTasks.push(this.loadBrush(data.brushMap[name]))
@@ -110,15 +110,15 @@ export default class IDraw implements TypeIDraw {
       path.positions.forEach(async (p, i) => {
         drawTasks.push(async (ctx: any, next: Function) => {
           if (i === 0) {
-            brush.drawStart();
+            core.drawStart();
           } else if (i === path.positions.length - 1) {
-            brush.pushPosition(p);
-            brush.drawEnd();
+            core.pushPosition(p);
+            core.drawEnd();
           } else {
-            brush.pushPosition(p);
+            core.pushPosition(p);
           }
           if (i > 0) {
-            brush.drawLine();
+            core.drawLine();
           }
 
           let time = 1;
@@ -142,7 +142,7 @@ export default class IDraw implements TypeIDraw {
   
   useBrush(name: string) {
     const image = this._patternMap[name];
-    this._brush.setBrushPoint({
+    this._core.setBrush({
       name,
       pattern: image,
       maxSize: this._currentSize,

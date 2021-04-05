@@ -9,3 +9,11 @@ lerna add typescript # add typescript to all modules
 ```sh
 lerna publish --force-publish
 ```
+
+
+```sh
+lerna add jest --scope=@idraw/util --dev
+lerna add babel-jest --scope=@idraw/util --dev
+lerna add @babel/core --scope=@idraw/util --dev
+lerna add @babel/preset-env --scope=@idraw/util --dev
+```
