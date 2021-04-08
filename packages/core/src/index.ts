@@ -68,19 +68,19 @@ export default class Core {
 
   public drawEnd() {
     if (this._acceleration > 1) {
-      let pos = {
-        x: this._expectedNextPosition?.x || 0,
-        y: this._expectedNextPosition?.y || 0,
-        t: (this._acceleration / (this._prevDistance * this._prevVelocity)) + (this._prevPosition?.t || 0),
-        // p: this._prevPosition?.p * Math.min(this._acceleration / (this._prevDistance * this._prevVelocity), 1)
-      };
-      for (let i = 0, n = this._inertanceNum; i < n; i++) {
-        // this._positions.push(pos);
-        this.pushPosition(pos);
-      }
-      if (this._positions.length >= 2) {
-        this.drawLine();
-      }
+      // let pos = {
+      //   x: this._expectedNextPosition?.x || 0,
+      //   y: this._expectedNextPosition?.y || 0,
+      //   t: (this._acceleration / (this._prevDistance * this._prevVelocity)) + (this._prevPosition?.t || 0),
+      //   // p: this._prevPosition?.p * Math.min(this._acceleration / (this._prevDistance * this._prevVelocity), 1)
+      // };
+      // for (let i = 0, n = this._inertanceNum; i < n; i++) {
+      //   // this._positions.push(pos);
+      //   this.pushPosition(pos);
+      // }
+      // if (this._positions.length >= 2) {
+      //   this.drawLine();
+      // }
     }
   }
 
