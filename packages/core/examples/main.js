@@ -1,13 +1,13 @@
-const { IDrawUtil, IDrawCore, IDrawDemoData } = window;
-
-const data = IDrawDemoData.basic;
+const { iDraw } = window;
+const { demoData, util, Core } = iDraw;
+const data = demoData.basic;
 
 async function main() {
   const canvas = document.querySelector('#canvas');
   const context = canvas.getContext('2d');
-  const core = new IDrawCore(context);
+  const core = new Core(context);
 
-  const image = await IDrawUtil.loader.loadImage(data.brushMap.ink.src);
+  const image = await util.loader.loadImage(data.brushMap.ink.src);
   
   data.paths.forEach(async (path) => {
     core.setBrush({
