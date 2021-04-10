@@ -6,7 +6,7 @@ const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
 
 module.exports = function myPlugin(pkgName) {
   return {
-    name: 'my-plugin', // this name will show up in warnings and errors
+    name: 'dts-plugin', // this name will show up in warnings and errors
     async closeBundle() {
 
       // build types
