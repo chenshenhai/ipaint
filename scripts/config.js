@@ -17,6 +17,10 @@ module.exports = {
       globalName: 'iDraw.IDraw',
     },
     {
+      dirName: 'board',
+      globalName: 'iDraw.Board'
+    },
+    {
       dirName: 'demo-data',
       globalName: 'iDraw.demoData'
     }
