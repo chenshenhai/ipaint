@@ -10,6 +10,7 @@ const resolveFile = function(names = []) {
 }
 
 const modules = [];
+const external = [ '@idraw/util', '@idraw/core', '@idraw/brush' ];
 
 for(let i = 0; i < packages.length; i++) {
   const pkg = packages[i];
@@ -27,7 +28,7 @@ for(let i = 0; i < packages.length; i++) {
     format: 'cjs',
     exports: 'default',
     plugins: [dtsPlugin(pkg.dirName),],
-    external: [ '@draw/util', '@draw/core' ]
+    external,
   });
   modules.push({
     input: resolveFile([pkg.dirName, 'src', 'index.ts']),
@@ -35,7 +36,7 @@ for(let i = 0; i < packages.length; i++) {
     name: pkg.globalName,
     esModule: true,
     format: 'es',
-    external: [ '@draw/util', '@draw/core' ],
+    external,
     plugins: [dtsPlugin(pkg.dirName),]
   });
 }

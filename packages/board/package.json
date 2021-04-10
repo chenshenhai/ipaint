@@ -20,6 +20,7 @@
     "@idraw/types": "^0.0.2"
   },
   "dependencies": {
+    "@idraw/brush": "^0.0.2",
     "@idraw/core": "^0.0.2",
     "@idraw/util": "^0.0.2"
   }
