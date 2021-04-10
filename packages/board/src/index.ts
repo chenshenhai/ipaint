@@ -1,4 +1,6 @@
-export default class IDrawBoard {
+import './css/index.less';
+
+export default class Board {
   private _container: HTMLElement;
 
   constructor(container: HTMLElement) {

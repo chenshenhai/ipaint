@@ -2,7 +2,8 @@ const path = require('path');
 const typescript = require('rollup-plugin-typescript2');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const { packages } = require('./config');
-const plugin = require('./util/plugin');
+const dtsPlugin = require('./util/dts-plugin');
+const stylePlugin = require('./util/style-plugin');
 
 const resolveFile = function(names = []) {
   return path.join(__dirname, '..', 'packages', ...names)
@@ -17,7 +18,7 @@ for(let i = 0; i < packages.length; i++) {
     output: resolveFile([pkg.dirName, 'dist', 'index.global.js']),
     name: pkg.globalName,
     format: 'iife',
-    // plugins: [plugin(pkg.dirName)]
+    plugins: []
   });
   modules.push({
     input: resolveFile([pkg.dirName, 'src', 'index.ts']),
@@ -25,7 +26,7 @@ for(let i = 0; i < packages.length; i++) {
     name: pkg.globalName,
     format: 'cjs',
     exports: 'default',
-    plugins: [plugin(pkg.dirName)],
+    plugins: [dtsPlugin(pkg.dirName),],
     external: [ '@draw/util', '@draw/core' ]
   });
   modules.push({
@@ -34,7 +35,8 @@ for(let i = 0; i < packages.length; i++) {
     name: pkg.globalName,
     esModule: true,
     format: 'es',
-    plugins: [plugin(pkg.dirName)]
+    external: [ '@draw/util', '@draw/core' ],
+    plugins: [dtsPlugin(pkg.dirName),]
   });
 }
 
@@ -52,7 +54,7 @@ function createConfigItem(params) {
       exports
     }, 
     plugins: [
-      ...[nodeResolve(), typescript()],
+      ...[stylePlugin(), nodeResolve(), typescript()],
       ...plugins,
     ],
   };
