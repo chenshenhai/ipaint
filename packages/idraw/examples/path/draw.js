@@ -1,10 +1,11 @@
-const { IDraw, IDrawBrush, IDrawDemoData } = window;
-const data = IDrawDemoData.basic;
+const { iDraw } = window;
+const { demoData, IDraw } = iDraw;
 
+const data = demoData.basic;
 const canvas = document.querySelector('#canvas');
-const iDraw = new IDraw(canvas);
+const idraw = new IDraw(canvas);
 
 async function main() {
-  await iDraw.draw(data);
+  await idraw.draw(data);
 }
 main();

@@ -1,5 +1,5 @@
 {
-  "name": "@idraw/brush",
+  "name": "@idraw/board",
   "version": "0.0.2",
   "description": "",
   "main": "dist/index.cjs.js",
@@ -15,5 +15,13 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@idraw/types": "^0.0.2"
+  },
+  "dependencies": {
+    "@idraw/brush": "^0.0.2",
+    "@idraw/core": "^0.0.2",
+    "@idraw/util": "^0.0.2"
   }
 }

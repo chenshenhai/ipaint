@@ -8,10 +8,10 @@ export default class Core {
   private _positions: TypeDataPosition[];
   private _prevPosition: TypeDataPosition|null;
   private _prevBrushSize: number = 0;
-  private _expectedNextPosition: TypeDataPosition|null;
+  // private _expectedNextPosition: TypeDataPosition|null;
   private _acceleration: number;
   private _prevVelocity: number;
-  private _prevDistance: number;
+  // private _prevDistance: number;
 
   private _velocityPressureCoff: number;
   
@@ -21,10 +21,10 @@ export default class Core {
     this._inertanceNum = 10;
     this._positions = [];
     this._prevPosition = null;
-    this._expectedNextPosition = null;
+    // this._expectedNextPosition = null;
     this._acceleration = 0;
     this._prevVelocity = 0;
-    this._prevDistance = 0;
+    // this._prevDistance = 0;
     
     // TODO
     this._velocityPressureCoff = 5;
@@ -61,26 +61,26 @@ export default class Core {
     this._prevPosition = null;
     this._prevBrushSize = 0;
     this._prevVelocity = 0;
-    this._prevDistance = 0;
-    this._expectedNextPosition = null;
+    // this._prevDistance = 0;
+    // this._expectedNextPosition = null;
     this._acceleration = 0;
   }
 
   public drawEnd() {
     if (this._acceleration > 1) {
-      let pos = {
-        x: this._expectedNextPosition?.x || 0,
-        y: this._expectedNextPosition?.y || 0,
-        t: (this._acceleration / (this._prevDistance * this._prevVelocity)) + (this._prevPosition?.t || 0),
-        // p: this._prevPosition?.p * Math.min(this._acceleration / (this._prevDistance * this._prevVelocity), 1)
-      };
-      for (let i = 0, n = this._inertanceNum; i < n; i++) {
-        // this._positions.push(pos);
-        this.pushPosition(pos);
-      }
-      if (this._positions.length >= 2) {
-        this.drawLine();
-      }
+      // let pos = {
+      //   x: this._expectedNextPosition?.x || 0,
+      //   y: this._expectedNextPosition?.y || 0,
+      //   t: (this._acceleration / (this._prevDistance * this._prevVelocity)) + (this._prevPosition?.t || 0),
+      //   // p: this._prevPosition?.p * Math.min(this._acceleration / (this._prevDistance * this._prevVelocity), 1)
+      // };
+      // for (let i = 0, n = this._inertanceNum; i < n; i++) {
+      //   // this._positions.push(pos);
+      //   this.pushPosition(pos);
+      // }
+      // if (this._positions.length >= 2) {
+      //   this.drawLine();
+      // }
     }
   }
 
@@ -118,11 +118,11 @@ export default class Core {
     ctx.restore();
 
     this._acceleration = acceleration;
-    this._expectedNextPosition = this._getInterlatePos(this._prevPosition, pos, 1 + this._acceleration);
+    // this._expectedNextPosition = this._getInterlatePos(this._prevPosition, pos, 1 + this._acceleration);
     this._prevPosition = pos;
     this._prevBrushSize = brushSize;
     this._prevVelocity = velocity;
-    this._prevDistance = distance;
+    // this._prevDistance = distance;
   }
 
 
