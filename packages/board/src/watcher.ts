@@ -3,6 +3,8 @@ import {
   TypeWatchCallback,
   TypeDataPosition,
 } from '@idraw/types';
+// import util from '@idraw/util';
+// const { throttle } = util.time;
 
 export class Watcher implements TypeWatcher {
 
@@ -19,6 +21,7 @@ export class Watcher implements TypeWatcher {
   }
 
   onDraw(callback: TypeWatchCallback) {
+    // this._onDraw = throttle(callback, 8);
     this._onDraw = callback;
   }
 

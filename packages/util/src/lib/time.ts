@@ -29,3 +29,16 @@ export function delay(time: number): Promise<void> {
   })
 }
 
+export function throttle(fn: Function, timeout: number) {
+  let timer: any = -1;
+  return function(...args: any[]) {
+    if (timer > 0) {
+      return;
+    }
+    timer = setTimeout(() => {
+      fn(...args);
+      timer = -1;
+    }, timeout)
+  }
+}
+
