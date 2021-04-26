@@ -1,4 +1,8 @@
 import { TypeBrushPoint, TypeDataPosition } from '@idraw/types';
+import { updateBrushColor } from './lib/brush';
+
+const DEFAULT_COLOR = 0x000000;
+const DEFAULT_PRESSURE = 0.4;
 
 export default class Core {
 
@@ -12,8 +16,6 @@ export default class Core {
   private _acceleration: number;
   private _prevVelocity: number;
   // private _prevDistance: number;
-
-  private _velocityPressureCoff: number;
   
   constructor(ctx: CanvasRenderingContext2D) {
     this._ctx = ctx;
@@ -25,13 +27,16 @@ export default class Core {
     this._acceleration = 0;
     this._prevVelocity = 0;
     // this._prevDistance = 0;
-    
-    // TODO
-    this._velocityPressureCoff = 5;
+  }
+
+  public clear() {
+    this._positions = [];
+    const { width, height } = this._ctx.canvas;
+    this._ctx.clearRect(0, 0, width, height);
   }
 
   public setBrush(brush: TypeBrushPoint) {
-    this._brushPoint = brush;
+    this._brushPoint = {...{ color: DEFAULT_COLOR }, ...brush};
   }
 
   public setSize(size: number) {
@@ -41,8 +46,30 @@ export default class Core {
     }
   }
 
+  public setColor(color: number) {
+    if (this._brushPoint) {
+      this._brushPoint.color = color;
+      const pattern = updateBrushColor(this._brushPoint.pattern, color);
+      this._brushPoint.pattern = pattern;
+    }
+  }
+
+  public setPressure(pressure: number) {
+    if (this._brushPoint) {
+      this._brushPoint.pressure = pressure;
+    }
+  }
+
   public getBrushName(): string|undefined {
     return this._brushPoint?.name;
+  }
+
+  public getBrushColor(): number {
+    return this._brushPoint?.color || DEFAULT_COLOR;
+  }
+
+  public getBrushPressure(): number {
+    return this._brushPoint?.pressure || DEFAULT_PRESSURE;
   }
 
   public getPositions() {
@@ -51,7 +78,6 @@ export default class Core {
 
   public pushPosition(p: TypeDataPosition) {
     if (this._isVaildPosition(p)) {
-      
       this._positions.push(p);
     }
   }
@@ -100,18 +126,22 @@ export default class Core {
     let distance = this._getDistance(pos, this._prevPosition);
     let velocity = distance / Math.max(1, t);
     let acceleration = (this._prevVelocity == 0) ? 0 : velocity / this._prevVelocity;
-    const curve = function(t: number, b: number, c: number, d: number) {
-      return c * t / d + b;
+    const curve = function(velocity: number, size: number, sizeNegative: number, pressureRatio: number) {
+      return sizeNegative * velocity / pressureRatio + size;
     }
+
+    let pressureRatio = this._brushPoint.pressure * 20;
+    pressureRatio = Math.min(Math.max(pressureRatio, 1), 20);
     let brushSize = Math.max(
       this._brushPoint.minSize,
       curve(
         velocity,
         this._brushPoint.maxSize,
         (0 - this._brushPoint.maxSize) - this._brushPoint.minSize,
-        this._velocityPressureCoff
+        pressureRatio,
       )
     );
+    
     
     ctx.save();
     this._drawPath(ctx, this._prevPosition, pos, brushSize, distance);

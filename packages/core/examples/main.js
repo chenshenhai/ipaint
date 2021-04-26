@@ -17,6 +17,11 @@ async function main() {
       minSize: 0,
     });
 
+    core.setColor(0x007fff);
+    core.setPressure(0.3);
+    
+    // core.setColor(0x000000);
+
     path.positions.forEach(async (p, i) => {
       if (i === 0) {
         core.drawStart();

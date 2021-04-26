@@ -1,4 +1,6 @@
 .idraw-board-wrapper {
+  position: relative;
+
   canvas {
     background-image:
       linear-gradient(#aaaaaa40 1px, transparent 0),
@@ -7,4 +9,12 @@
       linear-gradient(90deg, #aaa 1px, transparent 0);
     background-size: 10px 10px, 10px 10px, 50px 50px, 50px 50px;
   }
+
+  .idraw-board-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
 }

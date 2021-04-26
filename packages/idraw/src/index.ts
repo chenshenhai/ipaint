@@ -4,7 +4,7 @@ import util from '@idraw/util';
 import Core from '@idraw/core';
 
 const { loadImage } = util.loader;
-const { compose,   delay, } = util.time;
+const { compose, delay, } = util.time;
 
 export default class IDraw implements TypeIDraw {
 
@@ -46,9 +46,11 @@ export default class IDraw implements TypeIDraw {
       core.drawLine();
       const positions = core.getPositions();
       const brushName = core.getBrushName();
+      const color = core.getBrushColor();
+      const pressure = core.getBrushPressure();
       const size = this._currentSize;
       if (typeof brushName === 'string') {
-        this._data.paths.push({ brush: brushName, size, positions, })
+        this._data.paths.push({ brush: brushName, size, color, pressure, positions, })
       }
     });
     this._isStart = true;
@@ -147,6 +149,8 @@ export default class IDraw implements TypeIDraw {
       pattern: image,
       maxSize: this._currentSize,
       minSize: 0,
+      color: 0x000000,
+      pressure: 0.4
     });
   }
 
