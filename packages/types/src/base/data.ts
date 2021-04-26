@@ -11,7 +11,9 @@ export type TypeDataBrush = {
 export type TypeDataPath = {
   brush: string,
   size: number;
-  positions: TypeDataPosition[]
+  positions: TypeDataPosition[],
+  color?: number;
+  pressure?: number;
 }
 
 export type TypeDataPosition = {

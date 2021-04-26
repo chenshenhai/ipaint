@@ -1,0 +1,32 @@
+@process-height: 28px;
+@process-radius: 14px;
+
+.idraw-board-component-progress {
+  width: 100%;
+  height: @process-height;
+  display: block;
+
+  &.progress-hidden {
+    display: none;
+  }
+
+  .idraw-board-progress-outer {
+    position: relative;
+    height: @process-height;
+    width: 100%;
+    background: #666666;
+    border-radius: @process-radius;
+    overflow: hidden;
+  }
+
+  .idraw-board-progress-inner {
+    position: absolute;
+    height: @process-height;
+    width: 100%;
+    background: #00d4ff;
+    border-radius: @process-radius;
+  }
+}
+
+
+  
