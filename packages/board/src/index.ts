@@ -14,6 +14,7 @@ type Options = {
 }
 
 const { loadImage } = util.loader;
+const { downloadImageFromCanvas } = util.file;
 // const { compose,   delay, } = util.time;
 
 export default class Board {
@@ -110,9 +111,18 @@ export default class Board {
     eventHub.on(eventCode.BOARD_CLEAR, () => {
       this._core.clear();
       this._data.paths = [];
-    })
+    });
     eventHub.on(eventCode.LOG_DATA, () => {
       console.log('data = ', this.getData());
+    });
+    eventHub.on(eventCode.DOWNLOAD, () => {
+      downloadImageFromCanvas(
+        this._canvas, 
+        {
+          filename: 'idraw.png', 
+          type: 'image/png' 
+        }
+      );
     })
   }
 }

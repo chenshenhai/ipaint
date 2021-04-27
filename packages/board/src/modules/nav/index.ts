@@ -68,6 +68,8 @@ export class Nav {
     console.log('key =', key);
     if (key === 'log-data') {
       eventHub.trigger(eventCode.LOG_DATA);
+    } else if (key === 'download') {
+      eventHub.trigger(eventCode.DOWNLOAD);
     }
   }
 
