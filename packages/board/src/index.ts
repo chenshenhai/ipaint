@@ -9,6 +9,8 @@ import { eventCode, eventHub } from './service/event';
 type Options = {
   width: number;
   height: number;
+  canvasWidth: number;
+  canvasHeight: number;
 }
 
 const { loadImage } = util.loader;
@@ -56,7 +58,7 @@ export default class Board {
       core.drawLine();
     });
     watcher.onDrawEnd((p) => {
-      core.pushPosition(p);
+      // core.pushPosition(p);
       core.drawEnd();
       core.drawLine();
       const positions = core.getPositions();
@@ -108,6 +110,9 @@ export default class Board {
     eventHub.on(eventCode.BOARD_CLEAR, () => {
       this._core.clear();
       this._data.paths = [];
+    })
+    eventHub.on(eventCode.LOG_DATA, () => {
+      console.log('data = ', this.getData());
     })
   }
 }

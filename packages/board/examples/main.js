@@ -7,6 +7,8 @@ async function main() {
   const board = new Board(dom, {
     width: window.innerWidth,
     height: window.innerHeight,
+    canvasWidth: 2479,
+    canvasHeight: 3508,
   });
   
   board.ready().then(() => {

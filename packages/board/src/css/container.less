@@ -1,12 +1,17 @@
 .idraw-board-wrapper {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 
-  canvas {
+  .idraw-board-canvas {
+    display: flex;
     background-image:
-      linear-gradient(#aaaaaa40 1px, transparent 0),
-      linear-gradient(90deg, #aaaaaa40 1px, transparent 0),
-      linear-gradient(#aaa 1px, transparent 0),
-      linear-gradient(90deg, #aaa 1px, transparent 0);
+    linear-gradient(#aaaaaa40 1px, transparent 0),
+    linear-gradient(90deg, #aaaaaa40 1px, transparent 0),
+    linear-gradient(#aaa 1px, transparent 0),
+    linear-gradient(90deg, #aaa 1px, transparent 0);
     background-size: 10px 10px, 10px 10px, 50px 50px, 50px 50px;
   }
 
@@ -17,4 +22,10 @@
     right: 0;
   }
 
+  .idraw-board-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
 }
