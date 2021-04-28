@@ -8,6 +8,9 @@ type MenuOptions = {
 
 const menuConfig = {
   list: [{
+    name: 'Scale',
+    key: 'scale',
+  }, {
     name: 'Color',
     key: 'color',
   }, {
@@ -19,7 +22,7 @@ const menuConfig = {
   }, {
     name: 'Clear',
     key: 'clear',
-  }]
+  },]
 }
 
 export class Menu {
@@ -74,6 +77,8 @@ export class Menu {
     console.log('key =', key);
     if (key === 'clear') {
       eventHub.trigger(eventCode.BOARD_CLEAR);
+    } else if (key === 'scale') {
+      eventHub.trigger(eventCode.SCALE_CANVAS);
     }
   }
 

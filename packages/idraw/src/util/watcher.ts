@@ -8,14 +8,14 @@ import {
 
 export class Watcher implements TypeWatcher {
 
-  private _canvas: HTMLCanvasElement;
+  private _dom: HTMLElement;
   private _isPainting: boolean = false;
   private _onDraw?: TypeWatchCallback;
   private _onDrawStart?: TypeWatchCallback;
   private _onDrawEnd?: TypeWatchCallback;
 
-  constructor(canvas: HTMLCanvasElement) {
-    this._canvas = canvas;
+  constructor(dom: HTMLElement) {
+    this._dom = dom;
     this._isPainting = false;
     this._initEvent();
   }
@@ -34,7 +34,7 @@ export class Watcher implements TypeWatcher {
   }
 
   _initEvent() {
-    const canvas = this._canvas;
+    const canvas = this._dom;
     canvas.addEventListener('mousedown', this._onStart.bind(this));
     canvas.addEventListener('mousemove', this._onMove.bind(this));
     canvas.addEventListener('mouseup', this._onEnd.bind(this));
@@ -90,7 +90,7 @@ export class Watcher implements TypeWatcher {
   }
 
   _getPosition(e: MouseEvent|TouchEvent) {
-    const canvas = this._canvas;
+    const canvas = this._dom;
     let x = 0;
     let y = 0;
 
@@ -114,7 +114,7 @@ export class Watcher implements TypeWatcher {
   }
 
   private _isVaildPosition(p: TypeDataPosition) {
-    return ( p.x > 0 && p.y > 0 && p.t > 0)
+    return ( !isNaN(p.x) && !isNaN(p.y) && p.t > 0)
   }
   
 }

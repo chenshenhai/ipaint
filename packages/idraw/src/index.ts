@@ -1,10 +1,11 @@
-import { TypeData, TypeBrushOptions } from '@idraw/types';
+import { TypeData, TypeBrushOptions, TypeDataPosition } from '@idraw/types';
 import util from '@idraw/util';
 import Core from '@idraw/core';
 import brush from '@idraw/brush';
 import { Watcher } from './util/watcher';
 import Container from './container';
 import { eventCode, eventHub } from './service/event';
+import { parseMaskToCanvasPosition } from './service/parse';
 
 type Options = {
   width: number;
@@ -17,11 +18,14 @@ const { loadImage } = util.loader;
 const { downloadImageFromCanvas } = util.file;
 // const { compose,   delay, } = util.time;
 
+type StatusType = 'SCALE_CANVAS' | 'ALLOW_DRAWING'
+
 export default class Board {
 
   private _dom: HTMLElement;
   private _container: Container;
 
+  private _mask: HTMLDivElement;
   private _canvas: HTMLCanvasElement;
   private _context: CanvasRenderingContext2D
   private _watcher: Watcher;
@@ -30,15 +34,18 @@ export default class Board {
   private _data: TypeData;
   private _patternMap: {[name: string]: HTMLImageElement | HTMLCanvasElement} = {};
   private _currentSize: number = 10;
+  private _status: StatusType = 'ALLOW_DRAWING';
+  private _prevPosition?: TypeDataPosition;
 
 
   constructor(dom: HTMLElement, opts: Options) {
 
     this._dom = dom;
     this._container = new Container(this._dom, opts);
+    this._mask = this._container.getMask();
     this._canvas = this._container.getCanvas();
     this._context = this._canvas.getContext('2d') as CanvasRenderingContext2D;
-    this._watcher = new Watcher(this._canvas);
+    this._watcher = new Watcher(this._mask);
     this._core = new Core(this._context);
     this._data = { brushMap: {}, paths: [] };
     // this._patternMap: 
@@ -52,22 +59,43 @@ export default class Board {
     const watcher = this._watcher;
     const core = this._core;
     watcher.onDrawStart((p) => {
-      core.drawStart()
+      if (this._status === 'ALLOW_DRAWING') {
+        core.drawStart()
+      } else if (this._status === 'SCALE_CANVAS') {
+        if (!this._prevPosition) {
+          this._prevPosition = p
+        }
+      }
+      
     });
     watcher.onDraw((p) => {
-      core.pushPosition(p);
-      core.drawLine();
+      if (this._status === 'ALLOW_DRAWING') {
+        const _p = parseMaskToCanvasPosition(p, this._mask, this._canvas);
+        core.pushPosition(_p);
+        core.drawLine();
+      } else if (this._status === 'SCALE_CANVAS') {
+        const prevP = this._prevPosition;
+        if (prevP) {
+          const moveX = p.x - prevP.x;
+          const moveY = p.y - prevP.y;
+          this._container.moveCanvas(moveX, moveY);
+        }
+        this._prevPosition = p;
+      }
     });
     watcher.onDrawEnd((p) => {
-      // core.pushPosition(p);
-      core.drawEnd();
-      core.drawLine();
-      const positions = core.getPositions();
-      const brushName = core.getBrushName();
-      const size = this._currentSize;
-      if (typeof brushName === 'string') {
-        this._data.paths.push({ brush: brushName, size, positions, })
+      if (this._status === 'ALLOW_DRAWING') {
+        core.drawEnd();
+        core.drawLine();
+        const positions = core.getPositions();
+        const brushName = core.getBrushName();
+        const size = this._currentSize;
+        if (typeof brushName === 'string') {
+          this._data.paths.push({ brush: brushName, size, positions, })
+        }
       }
+      this._prevPosition = undefined;
+      console.log('this._prevPosition ===', this._prevPosition);
     });
 
     await this.loadBrush({ name: 'ink', src: brush.ink.src});
@@ -108,6 +136,7 @@ export default class Board {
   }
 
   private _initEvent() {
+
     eventHub.on(eventCode.BOARD_CLEAR, () => {
       this._core.clear();
       this._data.paths = [];
@@ -116,14 +145,15 @@ export default class Board {
       console.log('data = ', this.getData());
     });
     eventHub.on(eventCode.DOWNLOAD, () => {
-      downloadImageFromCanvas(
-        this._canvas, 
-        {
-          filename: 'idraw.png', 
-          type: 'image/png' 
-        }
-      );
-    })
+      downloadImageFromCanvas(this._canvas, {filename: 'idraw.png', type: 'image/png'});
+    });
+    eventHub.on(eventCode.SCALE_CANVAS, () => {
+      if (this._status !== 'SCALE_CANVAS') {
+        this._status = 'SCALE_CANVAS';
+      } else {
+        this._status = 'ALLOW_DRAWING';
+      }
+    });
   }
 }
 

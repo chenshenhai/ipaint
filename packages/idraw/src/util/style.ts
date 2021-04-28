@@ -28,3 +28,46 @@ export function setStyle(
   });
   dom.setAttribute('style', styleStr);
 }
+
+export function getDomTransform(dom: HTMLElement): {
+  scaleX: number;
+  skewY: number;
+  skewX: number;
+  scaleY: number;
+  translateX: number;
+  translateY: number;
+} {
+  // transform: matrix( scaleX(), skewY(), skewX(), scaleY(), translateX(), translateY() )
+  // matrix(1, 2, -1, 1, 80, 80)
+  const style = getComputedStyle(dom) || {};
+  const { transform } = style;
+  const matrixStr = transform.replace(/^matrix\(|\)$/ig, '');
+  const matrixList = matrixStr.split(',').map((str) => {
+    const val = parseFloat(str);
+    return isNaN(val) ? 0 : val;
+  });
+  const matrix = {
+    scaleX: matrixList[0],
+    skewY: matrixList[1],
+    skewX: matrixList[2],
+    scaleY: matrixList[3],
+    translateX: matrixList[4],
+    translateY: matrixList[5],
+  }
+  return matrix;
+}
+
+
+export function setDomTransform(dom: HTMLElement, matrix: {
+  scaleX: number;
+  skewY: number;
+  skewX: number;
+  scaleY: number;
+  translateX: number;
+  translateY: number;
+}) {
+  // transform: matrix( scaleX(), skewY(), skewX(), scaleY(), translateX(), translateY() )
+  // matrix(1, 2, -1, 1, 80, 80)
+  const transform = `matrix(${matrix.scaleX}, ${matrix.skewY}, ${matrix.skewX}, ${matrix.scaleY}, ${matrix.translateX}, ${matrix.translateY})`;
+  dom.style.setProperty('transform', transform);
+}
