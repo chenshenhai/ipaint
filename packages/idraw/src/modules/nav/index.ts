@@ -11,9 +11,6 @@ const navConfig = {
     name: 'Undo',
     key: 'undo',
   }, {
-    name: 'Redo',
-    key: 'redo',
-  },{
     name: 'Log Data',
     key: 'log-data',
   }, {
@@ -76,6 +73,8 @@ export class Nav {
       eventHub.trigger(eventCode.LOG_DATA);
     } else if (key === 'download') {
       eventHub.trigger(eventCode.DOWNLOAD);
+    } else if (key === 'undo') {
+      eventHub.trigger(eventCode.UNDO)
     }
   }
 

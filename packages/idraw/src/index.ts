@@ -1,4 +1,4 @@
-import { TypeData, TypeBrushOptions, TypeDataPosition } from '@idraw/types';
+import { TypeData, TypeBrushOptions, TypeDataPosition, TypeDataPath } from '@idraw/types';
 import util from '@idraw/util';
 import Core from '@idraw/core';
 import brush from '@idraw/brush';
@@ -33,12 +33,13 @@ export default class Board {
   private _isStart: boolean = false;
   private _data: TypeData;
   private _patternMap: {[name: string]: HTMLImageElement | HTMLCanvasElement} = {};
-  private _currentSize: number = 10;
+  private _currentSize: number = 20;
+  private _currentPressure: number = 0.3;
+  private _currentColor: number = 0x000000;
   private _status: StatusType = 'ALLOW_DRAWING';
   private _prevPosition?: TypeDataPosition;
 
   constructor(dom: HTMLElement, opts: Options) {
-
     this._dom = dom;
     this._container = new Container(this._dom, opts);
     this._mask = this._container.getMask();
@@ -89,16 +90,18 @@ export default class Board {
         core.drawLine();
         const positions = core.getPositions();
         const brushName = core.getBrushName();
+        const pressure = this._currentPressure;
+        const color = this._currentColor;
         const size = this._currentSize;
         if (typeof brushName === 'string') {
-          this._data.paths.push({ brush: brushName, size, positions, })
+          this._data.paths.push({ brush: brushName, size, positions, pressure, color})
         }
       }
       this._prevPosition = undefined;
     });
 
     await this.loadBrush({ name: 'ink', src: brush.ink.src});
-    this.useBrush('ink', { size: 20, color: 0x000000, pressure: 0.3 });
+    this.useBrush('ink', { size: this._currentSize, color: this._currentColor, pressure: this._currentPressure });
     this._initEvent();
     this._isStart = true;
   }
@@ -134,11 +137,44 @@ export default class Board {
     return this._data;
   }
 
+  undo() {
+    if (this._data.paths.length > 0) {
+      this._data.paths.pop();
+    }
+    this.redraw();
+  }
+
+  redraw() {
+    const core = this._core;
+    // TODO
+    core.setBackgroundColor(0xffffff);
+    this._data.paths.forEach((path: TypeDataPath) => {
+      this.useBrush(path.brush, {
+        size: path.size || 20, // TODO
+        color: path.color || 0x000000, // TODO
+        pressure: path.pressure || 0.3, // TODO
+      });
+      path.positions.forEach(async (p, i) => {
+        if (i === 0) {
+          core.drawStart();
+        } else if (i === path.positions.length - 1) {
+          core.pushPosition(p);
+          core.drawEnd();
+        } else {
+          core.pushPosition(p);
+        }
+        if (i > 0) {
+          core.drawLine();
+        }
+      });
+    })
+  }
+
   private _initEvent() {
 
     eventHub.on(eventCode.BOARD_CLEAR, () => {
       this._core.clear();
-      this._core.setBackgroundColor(0xffffff);
+      this._core.setBackgroundColor(0xffffff); // TODO
       this._data.paths = [];
     });
     eventHub.on(eventCode.LOG_DATA, () => {
@@ -159,6 +195,9 @@ export default class Board {
     eventHub.on(eventCode.SHOW_COLOR_SELECTOR, () => {
       this._container.showActionColor();
     });
+    eventHub.on(eventCode.UNDO, () => {
+      this.undo();
+    })
   }
 }
 
