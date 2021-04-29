@@ -1,4 +1,5 @@
 import { TypeDataPosition } from '@idraw/types';
+import { getDomTransform } from './../util/style';
 
 export function parseMaskToCanvasPosition(
   p: TypeDataPosition, 
@@ -13,8 +14,9 @@ export function parseMaskToCanvasPosition(
   // }
   // console.log('scale ====', scale, style.width, style.height);
   // console.log('canvas.getBoundingClientRect = ', canvas.getBoundingClientRect())
+  const transform = getDomTransform(canvas);
   const rect = canvas.getBoundingClientRect();
-  p.x = p.x - rect.x;
-  p.y = p.y - rect.y;
+  p.x = (p.x - rect.x) / (transform.scaleX || 1);
+  p.y = (p.y - rect.y) / (transform.scaleY || 1);
   return p;
 }

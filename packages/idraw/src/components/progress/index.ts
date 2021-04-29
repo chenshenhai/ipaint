@@ -31,7 +31,7 @@ export class Progress {
 
     const options = this._options;
     const { max = 100,  min = 0 } = options;
-    this.resetRange(max, min);
+    this.resetRange(min, max);
   }
 
   private _render() {
@@ -55,6 +55,7 @@ export class Progress {
     if (component) {
       mount.appendChild(component);
       this._component = component;
+      this._component.classList.add('progress-hidden');
       this._setInnerMovePercent(percent);
       this._triggerEvent();
     }
@@ -72,9 +73,9 @@ export class Progress {
     this._setInnerMovePercent(percent);
   }
 
-  resetOnChange(onChange: Function|null) {
-    this._options.onChange = onChange;
-  }
+  // resetOnChange(onChange: Function|null) {
+  //   this._options.onChange = onChange;
+  // }
 
   resetRange(min: number, max: number) {
     this._rangeList = [];
@@ -87,7 +88,6 @@ export class Progress {
 
   private _triggerEvent() {
     const that = this;
-    const options = this._options;
     const component = this._component;
     const outer = component?.querySelector('.idraw-board-progress-outer'); 
     if (!outer) {

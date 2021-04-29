@@ -37,7 +37,6 @@ export default class Board {
   private _status: StatusType = 'ALLOW_DRAWING';
   private _prevPosition?: TypeDataPosition;
 
-
   constructor(dom: HTMLElement, opts: Options) {
 
     this._dom = dom;
@@ -47,6 +46,7 @@ export default class Board {
     this._context = this._canvas.getContext('2d') as CanvasRenderingContext2D;
     this._watcher = new Watcher(this._mask);
     this._core = new Core(this._context);
+    this._core.setBackgroundColor(0xffffff);
     this._data = { brushMap: {}, paths: [] };
     // this._patternMap: 
   }
@@ -95,7 +95,6 @@ export default class Board {
         }
       }
       this._prevPosition = undefined;
-      console.log('this._prevPosition ===', this._prevPosition);
     });
 
     await this.loadBrush({ name: 'ink', src: brush.ink.src});
@@ -139,6 +138,7 @@ export default class Board {
 
     eventHub.on(eventCode.BOARD_CLEAR, () => {
       this._core.clear();
+      this._core.setBackgroundColor(0xffffff);
       this._data.paths = [];
     });
     eventHub.on(eventCode.LOG_DATA, () => {
@@ -150,9 +150,14 @@ export default class Board {
     eventHub.on(eventCode.SCALE_CANVAS, () => {
       if (this._status !== 'SCALE_CANVAS') {
         this._status = 'SCALE_CANVAS';
+        this._container.showScaleProgress(true);
       } else {
         this._status = 'ALLOW_DRAWING';
+        this._container.showScaleProgress(false);
       }
+    });
+    eventHub.on(eventCode.SHOW_COLOR_SELECTOR, () => {
+      this._container.showActionColor();
     });
   }
 }

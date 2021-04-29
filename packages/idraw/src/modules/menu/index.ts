@@ -79,6 +79,8 @@ export class Menu {
       eventHub.trigger(eventCode.BOARD_CLEAR);
     } else if (key === 'scale') {
       eventHub.trigger(eventCode.SCALE_CANVAS);
+    } else if (key === 'color') {
+      eventHub.trigger(eventCode.SHOW_COLOR_SELECTOR);
     }
   }
 

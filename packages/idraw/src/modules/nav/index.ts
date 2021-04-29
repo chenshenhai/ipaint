@@ -2,12 +2,18 @@ import { eventCode, eventHub } from '../../service/event';
 import './style.less';
 
 
-type MenuOptions = {
+type NavOptions = {
   mount: HTMLElement;
 }
 
 const navConfig = {
   list: [{
+    name: 'Undo',
+    key: 'undo',
+  }, {
+    name: 'Redo',
+    key: 'redo',
+  },{
     name: 'Log Data',
     key: 'log-data',
   }, {
@@ -18,11 +24,11 @@ const navConfig = {
 
 export class Nav {
 
-  private _opts: MenuOptions;
+  private _opts: NavOptions;
   private _isMounted: boolean = false;
   private _mount: HTMLElement;
 
-  constructor(opts: MenuOptions) {
+  constructor(opts: NavOptions) {
     this._opts = opts;
     this._mount = this._opts.mount;
   }

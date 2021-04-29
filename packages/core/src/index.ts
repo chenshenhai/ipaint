@@ -35,6 +35,12 @@ export default class Core {
     this._ctx.clearRect(0, 0, width, height);
   }
 
+  public setBackgroundColor(number: number) {
+    const { width, height } = this._ctx.canvas;
+    this._ctx.fillStyle = '#' + number.toString(16);
+    this._ctx.fillRect(0, 0, width, height);
+  }
+
   public setBrush(brush: TypeBrushPoint) {
     this._brushPoint = {...{ color: DEFAULT_COLOR }, ...brush};
   }

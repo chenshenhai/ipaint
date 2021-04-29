@@ -9,4 +9,5 @@ export const eventCode = {
   LOCK_DRAW: 'lock-draw',
   UNLOCK_DRAW: 'unlock-draw',
   SCALE_CANVAS: 'scale_canvas',
+  SHOW_COLOR_SELECTOR: 'show-color-selector'
 }

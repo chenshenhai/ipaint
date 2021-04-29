@@ -63,24 +63,26 @@ export class ActionSheet {
     const opts: ActionSheetOpts = this._options;
     const { height, zIndex, } = opts;
     const html = `
-    <div class="idraw-board-component-actionsheet" style="height:${height}px; z-index: ${zIndex};">
-      <div class="idraw-board-actionsheet-container">
+    <div class="idraw-board-component-actionsheet" style="z-index: ${zIndex};">
+      <div class="idraw-board-actionsheet-mask"></div>
+      <div class="idraw-board-actionsheet-container" style="height:${height}px;">
         <div class="idraw-board-actionsheet-header"></div>
         <div class="idraw-board-actionsheet-content"></div>
         <div class="idraw-board-actionsheet-footer"></div>
       </div>
     </div>
     `;
-    const body = document.querySelector('body');
+    // const body = document.querySelector('body');
     const mountDom = document.createElement('div');;
     mountDom.innerHTML = html;
     const component: HTMLDivElement|null = mountDom?.querySelector('div.idraw-board-component-actionsheet')
     if (component) {
       if (mount) {
         mount.appendChild(component);
-      } else {
-        body?.appendChild(component);
       }
+      // else {
+      //   body?.appendChild(component);
+      // }
 
       const contentMount: HTMLDivElement|null = component.querySelector('div.idraw-board-actionsheet-content');
 
@@ -89,15 +91,22 @@ export class ActionSheet {
           const args: ActionSheetLifeCycleArgs = { contentMount, };
           afterRender(args)
         }
-  
-        this._hasRendered = true;
-        this._component = component;
         this._contentMount = contentMount;
+        this._component = component;
+        this._onEvent();
+        this._hasRendered = true;
       }
       
     }
   }
   
+  private _onEvent() {
+    const mask = this._component?.querySelector('div.idraw-board-actionsheet-mask');
+    mask?.addEventListener('click', this._onMaskClose.bind(this), false);
+  }
 
+  private _onMaskClose(e: Event) {
+    this.hide();
+  }
 }
 
