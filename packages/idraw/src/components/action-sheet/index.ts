@@ -5,7 +5,7 @@ export interface ActionSheetLifeCycleArgs {
 }
 
 export interface ActionSheetOpts {
-  height: number;
+  height?: number;
   zIndex: number;
   beforeRender?: Function;
   afterRender?: Function;
@@ -65,7 +65,7 @@ export class ActionSheet {
     const html = `
     <div class="idraw-board-component-actionsheet" style="z-index: ${zIndex};">
       <div class="idraw-board-actionsheet-mask"></div>
-      <div class="idraw-board-actionsheet-container" style="height:${height}px;">
+      <div class="idraw-board-actionsheet-container" style="${height && height > 0 ? 'height:px' : ''};">
         <div class="idraw-board-actionsheet-header"></div>
         <div class="idraw-board-actionsheet-content"></div>
         <div class="idraw-board-actionsheet-footer"></div>

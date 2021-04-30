@@ -8,5 +8,7 @@ export const eventCode = {
   LOG_DATA: 'log-data',
   UNDO: 'undo',
   SCALE_CANVAS: 'scale_canvas',
-  SHOW_COLOR_SELECTOR: 'show-color-selector'
+  SHOW_COLOR_SELECTOR: 'show-color-selector',
+  CLEAR_ACTION: 'clear-action',
+  SET_COLOR: 'set-color',
 }

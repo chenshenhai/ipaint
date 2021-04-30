@@ -1,8 +1,11 @@
 import { TypeBrushPoint, TypeDataPosition } from '@idraw/types';
+import util from '@idraw/util';
 import { updateBrushColor } from './lib/brush';
 
-const DEFAULT_COLOR = 0x000000;
+const DEFAULT_COLOR = '#000000';
 const DEFAULT_PRESSURE = 0.4;
+
+const { toColorHexNum } = util.color;
 
 export default class Core {
 
@@ -35,14 +38,15 @@ export default class Core {
     this._ctx.clearRect(0, 0, width, height);
   }
 
-  public setBackgroundColor(number: number) {
+  public setBackgroundColor(color: string) {
     const { width, height } = this._ctx.canvas;
-    this._ctx.fillStyle = '#' + number.toString(16);
+    this._ctx.fillStyle = color;
     this._ctx.fillRect(0, 0, width, height);
   }
 
   public setBrush(brush: TypeBrushPoint) {
     this._brushPoint = {...{ color: DEFAULT_COLOR }, ...brush};
+    this.setColor(this._brushPoint.color);
   }
 
   public setSize(size: number) {
@@ -52,10 +56,10 @@ export default class Core {
     }
   }
 
-  public setColor(color: number) {
+  public setColor(color: string) {
     if (this._brushPoint) {
       this._brushPoint.color = color;
-      const pattern = updateBrushColor(this._brushPoint.pattern, color);
+      const pattern = updateBrushColor(this._brushPoint.pattern, toColorHexNum(color));
       this._brushPoint.pattern = pattern;
     }
   }
@@ -70,7 +74,7 @@ export default class Core {
     return this._brushPoint?.name;
   }
 
-  public getBrushColor(): number {
+  public getBrushColor(): string {
     return this._brushPoint?.color || DEFAULT_COLOR;
   }
 

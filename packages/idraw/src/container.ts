@@ -1,15 +1,17 @@
 import './css/container.less';
 import { setStyle, getDomTransform, setDomTransform } from './util/style';
-import { Menu } from './modules/menu';
-import { Nav } from './modules/nav';
 import { Progress } from './components/progress';
 import { ActionSheet } from './components/action-sheet';
+import { Menu } from './modules/menu';
+import { Nav } from './modules/nav';
+import { Color } from './modules/color';
 
 type Options = {
   width: number;
   height: number;
   canvasWidth: number;
   canvasHeight: number;
+  onChangeColor?(color: string): void;
 }
 
 export default class Container {
@@ -134,13 +136,23 @@ export default class Container {
         }
       }
     });
+
+    let colorSelector: Color;
     this._actionColor = new ActionSheet({
       mount: this._wrapper,
       height: 200,
       zIndex: 1,
       afterRender: (opts: { contentMount: HTMLElement }) => {
         const { contentMount } = opts;
-        contentMount.innerText = 'hello color'
+        colorSelector = new Color({ 
+          mount: contentMount,
+          onChange: (color: string) => {
+            if (typeof this._opts.onChangeColor === 'function') {
+              this._opts.onChangeColor(color);
+            }
+          }
+        });
+        colorSelector.render();
       }
     })
   }

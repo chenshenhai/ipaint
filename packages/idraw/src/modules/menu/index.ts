@@ -75,6 +75,7 @@ export class Menu {
 
   private _emitEvent(key: string) {
     console.log('key =', key);
+    eventHub.trigger(eventCode.CLEAR_ACTION);
     if (key === 'clear') {
       eventHub.trigger(eventCode.BOARD_CLEAR);
     } else if (key === 'scale') {

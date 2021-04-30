@@ -12,7 +12,7 @@ export type TypeDataPath = {
   brush: string,
   size: number;
   positions: TypeDataPosition[],
-  color: number;
+  color: string;
   pressure: number;
 }
 
