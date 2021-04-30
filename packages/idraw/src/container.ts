@@ -5,6 +5,7 @@ import { ActionSheet } from './components/action-sheet';
 import { Menu } from './modules/menu';
 import { Nav } from './modules/nav';
 import { Color } from './modules/color';
+import { Size } from './modules/size';
 
 type Options = {
   width: number;
@@ -28,6 +29,7 @@ export default class Container {
   private _canvasScaleRatio: number = 1;
 
   private _actionColor?: ActionSheet;
+  private _actionSize?: ActionSheet;
 
   constructor(dom: HTMLElement, opts: Options) {
     this._dom = dom;
@@ -95,6 +97,14 @@ export default class Container {
     }
   }
 
+  public showActionSize(isShow: boolean = true) {
+    if (isShow === true) {
+      this._actionSize?.show();
+    } else {
+      this._actionSize?.hide();
+    }
+  }
+
   public _scaleCanvas(scale: number) {
     const transform = getDomTransform(this._canvas);
     transform.scaleX = scale;
@@ -137,14 +147,13 @@ export default class Container {
       }
     });
 
-    let colorSelector: Color;
+    // let colorSelector: Color;
     this._actionColor = new ActionSheet({
       mount: this._wrapper,
-      height: 200,
       zIndex: 1,
       afterRender: (opts: { contentMount: HTMLElement }) => {
         const { contentMount } = opts;
-        colorSelector = new Color({ 
+        const colorSelector = new Color({ 
           mount: contentMount,
           onChange: (color: string) => {
             if (typeof this._opts.onChangeColor === 'function') {
@@ -154,7 +163,24 @@ export default class Container {
         });
         colorSelector.render();
       }
-    })
+    });
+    this._actionSize = new ActionSheet({
+      mount: this._wrapper,
+      zIndex: 1,
+      afterRender: (opts: { contentMount: HTMLElement }) => {
+        const { contentMount } = opts;
+        const sizer = new Size({ 
+          mount: contentMount,
+          onChange: (size: number) => {
+            console.log('size =', size);
+            // if (typeof this._opts.onChangeColor === 'function') {
+            //   this._opts.onChangeColor(color);
+            // }
+          }
+        });
+        sizer.render();
+      }
+    });
   }
 
 }

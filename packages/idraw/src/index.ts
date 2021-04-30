@@ -35,9 +35,6 @@ export default class Board {
   private _isStart: boolean = false;
   private _data: TypeData;
   private _patternMap: {[name: string]: HTMLImageElement | HTMLCanvasElement} = {};
-  private _currentSize: number = DEFAULT_SIZE;
-  private _currentPressure: number = DEFAULT_PRESSURE;
-  private _currentColor: string = DEFAULT_COLOR;
   private _status: StatusType = 'ALLOW_DRAWING';
   private _prevPosition?: TypeDataPosition;
 
@@ -47,7 +44,8 @@ export default class Board {
       ...opts,
       ...{
         onChangeColor: (color: string) => {
-          eventHub.trigger(eventCode.SET_COLOR, color)
+          eventHub.trigger(eventCode.SET_COLOR, color);
+          eventHub.trigger(eventCode.SHOW_COLOR_SELECTOR, false);
         }
       }
     });
@@ -99,9 +97,9 @@ export default class Board {
         core.drawLine();
         const positions = core.getPositions();
         const brushName = core.getBrushName();
-        const pressure = this._currentPressure;
-        const color = this._currentColor;
-        const size = this._currentSize;
+        const pressure = core.getPressure();
+        const color = this._core.getColor();
+        const size = this._core.getSize();
         if (typeof brushName === 'string') {
           this._data.paths.push({ brush: brushName, size, positions, pressure, color})
         }
@@ -112,7 +110,11 @@ export default class Board {
     await this.loadBrush({ name: 'ink', src: brush.ink.src});
     await this.loadBrush({ name: 'light', src: brush.light.src });
 
-    this.useBrush(DEFAULT_BRUSH, { size: this._currentSize, color: this._currentColor, pressure: this._currentPressure });
+    this.useBrush(DEFAULT_BRUSH, {
+      size: DEFAULT_SIZE,
+      color: DEFAULT_COLOR,
+      pressure: DEFAULT_PRESSURE
+    });
     this._initEvent();
     this._isStart = true;
   }
@@ -124,8 +126,7 @@ export default class Board {
   }
 
   setBrushSize(size: number) {
-    this._currentSize = size;
-    this._core.setSize(this._currentSize);
+    this._core.setSize(size);
   }
 
   useBrush(
@@ -222,7 +223,9 @@ export default class Board {
     });
     eventHub.on(eventCode.SET_COLOR, (color: string) => {
       this._core.setColor(color);
-      this._currentColor = color;
+    });
+    eventHub.on(eventCode.SET_SIZE, (size: number) => {
+      this._core.setSize(size);
     })
   }
 }

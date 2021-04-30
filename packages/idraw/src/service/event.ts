@@ -11,4 +11,5 @@ export const eventCode = {
   SHOW_COLOR_SELECTOR: 'show-color-selector',
   CLEAR_ACTION: 'clear-action',
   SET_COLOR: 'set-color',
+  SET_SIZE: 'set-size',
 }

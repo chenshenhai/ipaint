@@ -4,6 +4,7 @@ import { updateBrushColor } from './lib/brush';
 
 const DEFAULT_COLOR = '#000000';
 const DEFAULT_PRESSURE = 0.4;
+const DEFAULT_SIZE = 20;
 
 const { toColorHexNum } = util.color;
 
@@ -70,16 +71,20 @@ export default class Core {
     }
   }
 
-  public getBrushName(): string|undefined {
-    return this._brushPoint?.name;
+  public getSize(): number {
+    return this._brushPoint?.maxSize || DEFAULT_SIZE;
   }
 
-  public getBrushColor(): string {
+  public getColor(): string {
     return this._brushPoint?.color || DEFAULT_COLOR;
   }
 
-  public getBrushPressure(): number {
+  public getPressure(): number {
     return this._brushPoint?.pressure || DEFAULT_PRESSURE;
+  }
+
+  public getBrushName(): string|undefined {
+    return this._brushPoint?.name;
   }
 
   public getPositions() {
