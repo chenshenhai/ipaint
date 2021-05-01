@@ -18,5 +18,8 @@
   },
   "devDependencies": {
     "@idraw/types": "^0.0.2"
+  },
+  "dependencies": {
+    "@idraw/util": "^0.0.2"
   }
 }

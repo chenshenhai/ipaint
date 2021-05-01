@@ -3,7 +3,7 @@ export type TypeBrushPoint = {
   pattern: HTMLImageElement | HTMLCanvasElement,
   maxSize: number;
   minSize: number;
-  color: number;
+  color: string; // #000000
   pressure: number; // 0 - 1 // 
 }
 

@@ -17,8 +17,9 @@ async function main() {
       minSize: 0,
     });
 
-    core.setColor(0x007fff);
+    core.setColor('#007fff');
     core.setPressure(0.3);
+    core.setBackgroundColor('#ffffff');
     
     // core.setColor(0x000000);
 

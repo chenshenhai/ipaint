@@ -19,7 +19,7 @@ lerna add @babel/preset-env --scope=@idraw/util --dev
 ```
 
 ```sh
-lerna add @idraw/core --scope=@idraw/board
+lerna add @idraw/brush --scope=idraw
 lerna add @idraw/util --scope=@idraw/board
 lerna add @idraw/types --scope=@idraw/board --dev
 ```
