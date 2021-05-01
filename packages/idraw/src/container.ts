@@ -13,6 +13,7 @@ type Options = {
   canvasWidth: number;
   canvasHeight: number;
   onChangeColor?(color: string): void;
+  onChangeSize?(size: number): void;
 }
 
 export default class Container {
@@ -172,10 +173,9 @@ export default class Container {
         const sizer = new Size({ 
           mount: contentMount,
           onChange: (size: number) => {
-            console.log('size =', size);
-            // if (typeof this._opts.onChangeColor === 'function') {
-            //   this._opts.onChangeColor(color);
-            // }
+            if (typeof this._opts.onChangeSize === 'function') {
+              this._opts.onChangeSize(size);
+            }
           }
         });
         sizer.render();

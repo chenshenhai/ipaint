@@ -46,6 +46,10 @@ export default class Board {
         onChangeColor: (color: string) => {
           eventHub.trigger(eventCode.SET_COLOR, color);
           eventHub.trigger(eventCode.SHOW_COLOR_SELECTOR, false);
+        },
+        onChangeSize: (size: number) => {
+          eventHub.trigger(eventCode.SET_SIZE, size);
+          eventHub.trigger(eventCode.SHOW_SIZER, false);
         }
       }
     });
@@ -214,6 +218,9 @@ export default class Board {
     });
     eventHub.on(eventCode.SHOW_COLOR_SELECTOR, (isShow: boolean = true) => {
       this._container.showActionColor(isShow);
+    });
+    eventHub.on(eventCode.SHOW_SIZER, (isShow: boolean = true) => {
+      this._container.showActionSize(isShow);
     });
     eventHub.on(eventCode.UNDO, () => {
       this.undo();

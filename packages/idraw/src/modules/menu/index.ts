@@ -1,7 +1,6 @@
 import { eventCode, eventHub } from '../../service/event';
 import './style.less';
 
-
 type MenuOptions = {
   mount: HTMLElement;
 }
@@ -82,6 +81,8 @@ export class Menu {
       eventHub.trigger(eventCode.SCALE_CANVAS);
     } else if (key === 'color') {
       eventHub.trigger(eventCode.SHOW_COLOR_SELECTOR);
+    } else if (key === 'size') {
+      eventHub.trigger(eventCode.SHOW_SIZER)
     }
   }
 
