@@ -11,8 +11,10 @@ export const eventCode = {
   SHOW_COLOR_SELECTOR: 'show-color-selector',
   SHOW_SIZER: 'show-sizer',
   SHOW_BRUSH_SELECTOR: 'show-brush-selector',
+  SHOW_PRESSURE: 'show-pressure',
   CLEAR_ACTION: 'clear-action',
   SET_COLOR: 'set-color',
   SET_SIZE: 'set-size',
   SET_BRUSH: 'set-brush',
+  SET_PRESSURE: 'set-pressure',
 }

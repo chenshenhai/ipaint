@@ -18,10 +18,10 @@ const menuConfig = {
   }, {
     name: 'Brush',
     key: 'brush',
-  }, {
-    name: 'Clear',
-    key: 'clear',
-  },]
+  },{
+    name: 'Pressure',
+    key: 'pressure',
+  }]
 }
 
 export class Menu {
@@ -75,9 +75,7 @@ export class Menu {
   private _emitEvent(key: string) {
     console.log('key =', key);
     eventHub.trigger(eventCode.CLEAR_ACTION);
-    if (key === 'clear') {
-      eventHub.trigger(eventCode.BOARD_CLEAR);
-    } else if (key === 'scale') {
+    if (key === 'scale') {
       eventHub.trigger(eventCode.SCALE_CANVAS);
     } else if (key === 'color') {
       eventHub.trigger(eventCode.SHOW_COLOR_SELECTOR);
@@ -85,6 +83,8 @@ export class Menu {
       eventHub.trigger(eventCode.SHOW_SIZER)
     } else if (key === 'brush') {
       eventHub.trigger(eventCode.SHOW_BRUSH_SELECTOR)
+    } else if (key === 'pressure') {
+      eventHub.trigger(eventCode.SHOW_PRESSURE)
     }
   }
 

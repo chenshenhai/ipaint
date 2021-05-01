@@ -21,12 +21,28 @@ export const mergeCSS2StyleAttr = function(
 export function setStyle(
   dom: HTMLElement, 
   style: {[key: string]: string} ) {
-  const keys: string[] = Object.keys(style);
+  const originStyle = getStyle(dom);
+  const _style = {...originStyle, ...style}
+  const keys: string[] = Object.keys(_style);
   let styleStr = '';
   keys.forEach((key: string) => {
-    styleStr += `${key}:${style[key] || ''};`
+    styleStr += `${key}:${_style[key] || ''};`
   });
   dom.setAttribute('style', styleStr);
+}
+
+export function getStyle(dom: HTMLElement): {[key: string]: string} {
+  const styleObj: {[key: string]: string} = {};
+  const style = dom.getAttribute('style') || '';
+  const styleList = style.split(';');
+  styleList.forEach((item: string) => {
+    const dataList = item.split(':');
+    if (dataList[0] && typeof dataList[0] === 'string') {
+      styleObj[dataList[0]] = dataList[1] || '';
+    }
+  })
+
+  return styleObj;
 }
 
 export function getDomTransform(dom: HTMLElement): {
