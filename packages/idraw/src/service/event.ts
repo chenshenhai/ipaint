@@ -10,7 +10,9 @@ export const eventCode = {
   SCALE_CANVAS: 'scale_canvas',
   SHOW_COLOR_SELECTOR: 'show-color-selector',
   SHOW_SIZER: 'show-sizer',
+  SHOW_BRUSH_SELECTOR: 'show-brush-selector',
   CLEAR_ACTION: 'clear-action',
   SET_COLOR: 'set-color',
   SET_SIZE: 'set-size',
+  SET_BRUSH: 'set-brush',
 }

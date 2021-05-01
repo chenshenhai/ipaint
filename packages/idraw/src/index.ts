@@ -50,6 +50,10 @@ export default class Board {
         onChangeSize: (size: number) => {
           eventHub.trigger(eventCode.SET_SIZE, size);
           eventHub.trigger(eventCode.SHOW_SIZER, false);
+        },
+        onChangeBrush: (name: string) => {
+          eventHub.trigger(eventCode.SET_BRUSH, name);
+          eventHub.trigger(eventCode.SHOW_BRUSH_SELECTOR, false);
         }
       }
     });
@@ -222,6 +226,9 @@ export default class Board {
     eventHub.on(eventCode.SHOW_SIZER, (isShow: boolean = true) => {
       this._container.showActionSize(isShow);
     });
+    eventHub.on(eventCode.SHOW_BRUSH_SELECTOR, (isShow: boolean = true) => {
+      this._container.showActionBrush(isShow);
+    });
     eventHub.on(eventCode.UNDO, () => {
       this.undo();
     });
@@ -233,6 +240,13 @@ export default class Board {
     });
     eventHub.on(eventCode.SET_SIZE, (size: number) => {
       this._core.setSize(size);
+    });
+    eventHub.on(eventCode.SET_BRUSH, (brushName: string) => {
+      this.useBrush(brushName, {
+        color: this._core.getColor(),
+        size: this._core.getSize(),
+        pressure: this._core.getPressure(),
+      })
     })
   }
 }

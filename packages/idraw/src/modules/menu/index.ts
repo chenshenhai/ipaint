@@ -83,6 +83,8 @@ export class Menu {
       eventHub.trigger(eventCode.SHOW_COLOR_SELECTOR);
     } else if (key === 'size') {
       eventHub.trigger(eventCode.SHOW_SIZER)
+    } else if (key === 'brush') {
+      eventHub.trigger(eventCode.SHOW_BRUSH_SELECTOR)
     }
   }
 
