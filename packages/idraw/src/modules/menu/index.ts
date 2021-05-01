@@ -21,10 +21,7 @@ const menuConfig = {
   },{
     name: 'Pressure',
     key: 'pressure',
-  }, {
-    name: 'Clear',
-    key: 'clear',
-  },]
+  }]
 }
 
 export class Menu {
@@ -78,9 +75,7 @@ export class Menu {
   private _emitEvent(key: string) {
     console.log('key =', key);
     eventHub.trigger(eventCode.CLEAR_ACTION);
-    if (key === 'clear') {
-      eventHub.trigger(eventCode.BOARD_CLEAR);
-    } else if (key === 'scale') {
+    if (key === 'scale') {
       eventHub.trigger(eventCode.SCALE_CANVAS);
     } else if (key === 'color') {
       eventHub.trigger(eventCode.SHOW_COLOR_SELECTOR);

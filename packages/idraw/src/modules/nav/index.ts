@@ -11,11 +11,14 @@ const navConfig = {
     name: 'Undo',
     key: 'undo',
   }, {
-    name: 'Log Data',
-    key: 'log-data',
+    name: 'Clear',
+    key: 'clear',
   }, {
     name: 'Download',
     key: 'download',
+  }, {
+    name: 'Log Data',
+    key: 'log-data',
   }]
 }
 
@@ -75,6 +78,8 @@ export class Nav {
       eventHub.trigger(eventCode.DOWNLOAD);
     } else if (key === 'undo') {
       eventHub.trigger(eventCode.UNDO)
+    } else if (key === 'clear') {
+      eventHub.trigger(eventCode.BOARD_CLEAR)
     }
   }
 
