@@ -128,7 +128,15 @@ export default class Container {
     }
   }
 
-  public _scaleCanvas(scale: number) {
+  public setCanvasBackgroundImage(src: string) {
+    setStyle(this._canvas, {
+      'background': `url(${src}) no-repeat`,
+      'background-position': 'center',
+      'background-size': `${this._canvas.width}px`
+    })
+  }
+
+  private _scaleCanvas(scale: number) {
     const transform = getDomTransform(this._canvas);
     transform.scaleX = scale;
     transform.scaleY = scale;

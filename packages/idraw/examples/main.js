@@ -19,13 +19,11 @@ async function main() {
     // 300 px
     // canvasWidth: 2479,
     // canvasHeight: 3508,
-    
-    // canvasScale: Math.max(window.innerWidth / 2479, window.innerHeight / 3508)
-    // canvasScale: Math.max(2479 / window.innerWidth, 3508 / window.innerHeight)
   });
   
   idraw.ready().then(() => {
-    console.log('idraw ready!')
+    console.log('idraw ready!');
+    // idraw.setFacsimileImage('./images/copy.png');
   }).catch((err) => {
     console.log(err);
   });

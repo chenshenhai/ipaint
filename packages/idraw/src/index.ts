@@ -37,6 +37,7 @@ export default class Board {
   private _patternMap: {[name: string]: HTMLImageElement | HTMLCanvasElement} = {};
   private _status: StatusType = 'ALLOW_DRAWING';
   private _prevPosition?: TypeDataPosition;
+  private _facsimileImage?: string;
 
   constructor(dom: HTMLElement, opts: Options) {
     this._dom = dom;
@@ -162,15 +163,19 @@ export default class Board {
   }
 
   undo() {
+    this._core.clear();
     if (this._data.paths.length > 0) {
       this._data.paths.pop();
+    }
+    if (!this._facsimileImage) {
+      this._core.setBackgroundColor(DEFAULT_BG_COLOR);
     }
     this.redraw();
   }
 
   redraw() {
     const core = this._core;
-    core.setBackgroundColor(DEFAULT_BG_COLOR);
+    // core.setBackgroundColor(DEFAULT_BG_COLOR);
     this._data.paths.forEach((path: TypeDataPath) => {
       this.useBrush(path.brush, {
         size: path.size || DEFAULT_SIZE,
@@ -191,6 +196,13 @@ export default class Board {
         }
       });
     })
+  }
+
+  setFacsimileImage(src: string) {
+    this._core.clear();
+    this._container.setCanvasBackgroundImage(src);
+    this.redraw();
+    this._facsimileImage = src;
   }
 
   private _initEvent() {
