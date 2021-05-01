@@ -53,16 +53,17 @@ export class Size {
     } 
     const input: HTMLInputElement|undefined = this._input;
     input?.addEventListener('input', () => {
-      if (/^[0-9]{1,}$/.test(input?.value) !== true) {
+      if (/^[0-9]{0,}$/.test(input?.value) !== true) {
         input.value = parseInt(input?.value) > 0 ? parseInt(input?.value) + '' : DEFAULT_SIZE + '';
       }
-      
     }, false);
 
     const btn: HTMLButtonElement|undefined = this._btn;
     btn?.addEventListener('click', () => {
       if (typeof this._opts.onChange === 'function' && input) {
-        this._opts.onChange(parseInt(input?.value));
+        if (input?.value && parseInt(input?.value) > 0) {
+          this._opts.onChange(parseInt(input?.value));
+        }
       }
     }, false);
   }
