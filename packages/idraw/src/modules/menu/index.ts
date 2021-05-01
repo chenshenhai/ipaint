@@ -18,6 +18,9 @@ const menuConfig = {
   }, {
     name: 'Brush',
     key: 'brush',
+  },{
+    name: 'Pressure',
+    key: 'pressure',
   }, {
     name: 'Clear',
     key: 'clear',
@@ -85,6 +88,8 @@ export class Menu {
       eventHub.trigger(eventCode.SHOW_SIZER)
     } else if (key === 'brush') {
       eventHub.trigger(eventCode.SHOW_BRUSH_SELECTOR)
+    } else if (key === 'pressure') {
+      eventHub.trigger(eventCode.SHOW_PRESSURE)
     }
   }
 

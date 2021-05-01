@@ -54,6 +54,10 @@ export default class Board {
         onChangeBrush: (name: string) => {
           eventHub.trigger(eventCode.SET_BRUSH, name);
           eventHub.trigger(eventCode.SHOW_BRUSH_SELECTOR, false);
+        },
+        onChangePressure: (pressure: number) => {
+          eventHub.trigger(eventCode.SHOW_PRESSURE, false);
+          eventHub.trigger(eventCode.SET_PRESSURE, pressure);
         }
       }
     });
@@ -229,6 +233,9 @@ export default class Board {
     eventHub.on(eventCode.SHOW_BRUSH_SELECTOR, (isShow: boolean = true) => {
       this._container.showActionBrush(isShow);
     });
+    eventHub.on(eventCode.SHOW_PRESSURE, (isShow: boolean = true) => {
+      this._container.showActionPressure(isShow);
+    });
     eventHub.on(eventCode.UNDO, () => {
       this.undo();
     });
@@ -247,6 +254,9 @@ export default class Board {
         size: this._core.getSize(),
         pressure: this._core.getPressure(),
       })
+    });
+    eventHub.on(eventCode.SET_PRESSURE, (pressure: number) => {
+      this._core.setPressure(pressure);
     })
   }
 }

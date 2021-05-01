@@ -7,6 +7,7 @@ import { Nav } from './modules/nav';
 import { Color } from './modules/color';
 import { Size } from './modules/size';
 import { Brush } from './modules/brush';
+import { Pressure } from './modules/pressure';
 
 type Options = {
   width: number;
@@ -16,6 +17,7 @@ type Options = {
   onChangeColor?(color: string): void;
   onChangeSize?(size: number): void;
   onChangeBrush?(name: string): void;
+  onChangePressure?(pressyre: number): void;
 }
 
 export default class Container {
@@ -34,6 +36,7 @@ export default class Container {
   private _actionColor?: ActionSheet;
   private _actionSize?: ActionSheet;
   private _actionBrush?: ActionSheet;
+  private _actionPressure?: ActionSheet;
 
   constructor(dom: HTMLElement, opts: Options) {
     this._dom = dom;
@@ -114,6 +117,14 @@ export default class Container {
       this._actionBrush?.show();
     } else {
       this._actionBrush?.hide();
+    }
+  }
+
+  public showActionPressure(isShow: boolean = true) {
+    if (isShow === true) {
+      this._actionPressure?.show();
+    } else {
+      this._actionPressure?.hide();
     }
   }
 
@@ -202,6 +213,22 @@ export default class Container {
           onChange: (name: string) => {
             if (typeof this._opts.onChangeBrush === 'function') {
               this._opts.onChangeBrush(name);
+            }
+          }
+        });
+        sizer.render();
+      }
+    });
+    this._actionPressure = new ActionSheet({
+      mount: this._wrapper,
+      zIndex: 1,
+      afterRender: (opts: { contentMount: HTMLElement }) => {
+        const { contentMount } = opts;
+        const sizer = new Pressure({ 
+          mount: contentMount,
+          onChange: (pressure: number) => {
+            if (typeof this._opts.onChangePressure === 'function') {
+              this._opts.onChangePressure(pressure);
             }
           }
         });
