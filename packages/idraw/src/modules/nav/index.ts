@@ -18,7 +18,7 @@ const navConfig = {
     key: 'download',
   }, {
     name: 'Log Data',
-    key: 'log-data',
+    key: 'data',
   }]
 }
 
@@ -43,7 +43,7 @@ export class Nav {
         ${navConfig.list.map((item) => {
           return `
             <div 
-              class="idraw-board-nav-item"
+              class="idraw-board-nav-item idraw-board-nav-icon-${item.key}"
               data-nav-key="${item.key}" >
               ${item.name}
             </div>

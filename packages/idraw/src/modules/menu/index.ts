@@ -45,7 +45,7 @@ export class Menu {
         ${menuConfig.list.map((item) => {
           return `
             <div 
-              class="idraw-board-menu-item"
+              class="idraw-board-menu-item idraw-board-menu-icon-${item.key}"
               data-menu-key="${item.key}" >
               ${item.name}
             </div>
