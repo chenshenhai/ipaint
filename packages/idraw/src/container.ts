@@ -1,4 +1,3 @@
-import './css/container.less';
 import { setStyle, getDomTransform, setDomTransform } from './util/style';
 import { Progress } from './components/progress';
 import { ActionSheet } from './components/action-sheet';

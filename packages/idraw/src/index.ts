@@ -8,6 +8,8 @@ import { eventCode, eventHub } from './service/event';
 import { parseMaskToCanvasPosition } from './service/parse';
 import { DEFAULT_BG_COLOR, DEFAULT_COLOR, DEFAULT_SIZE, DEFAULT_BRUSH, DEFAULT_PRESSURE } from './util/constant';
 
+import './css/index.less';
+
 type Options = {
   width: number;
   height: number;

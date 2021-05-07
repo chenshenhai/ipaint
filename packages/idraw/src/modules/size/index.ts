@@ -1,5 +1,3 @@
-// import { eventCode, eventHub } from '../../service/event';
-import './style.less';
 import { DEFAULT_SIZE } from './../../util/constant';
 
 type ModOptions = {
