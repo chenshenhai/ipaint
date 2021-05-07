@@ -1,5 +1,4 @@
 import { eventCode, eventHub } from '../../service/event';
-import './style.less';
 
 type MenuOptions = {
   mount: HTMLElement;

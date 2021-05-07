@@ -1,5 +1,5 @@
 // import { eventCode, eventHub } from '../../service/event';
-import './style.less';
+// import './style.less';
 import brush from '@idraw/brush';
 
 

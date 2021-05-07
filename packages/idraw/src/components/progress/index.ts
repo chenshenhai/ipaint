@@ -1,4 +1,4 @@
-import './index.less';
+// import './index.less';
 
 import { mergeCSS2StyleAttr } from '../../util/style';
 import istype from '../../util/istype';

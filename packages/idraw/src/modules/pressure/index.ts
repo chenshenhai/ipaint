@@ -1,5 +1,3 @@
-// import { eventCode, eventHub } from '../../service/event';
-import './style.less';
 import { Progress } from './../../components/progress';
 import { DEFAULT_PRESSURE } from './../../util/constant';
 

@@ -1,7 +1,4 @@
-// import { eventCode, eventHub } from '../../service/event';
-import './style.less';
 import { colorList } from './../../util/constant';
-
 
 type ModOptions = {
   mount: HTMLElement;

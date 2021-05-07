@@ -1,6 +1,4 @@
 import { eventCode, eventHub } from '../../service/event';
-import './style.less';
-
 
 type NavOptions = {
   mount: HTMLElement;
