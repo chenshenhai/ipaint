@@ -20,9 +20,9 @@ module.exports = {
       dirName: 'idraw',
       globalName: 'iDraw.IDraw',
     },
-    {
-      dirName: 'demo-data',
-      globalName: 'iDraw.demoData'
-    }
+    // {
+    //   dirName: 'demo-data',
+    //   globalName: 'iDraw.demoData'
+    // }
   ]
 }
