@@ -2,27 +2,51 @@ const { iDraw } = window;
 const { demoData, util, Core } = iDraw;
 const data = demoData.basic;
 
-async function main() {
-  const canvas = document.querySelector('#canvas');
-  const context = canvas.getContext('2d');
-  const core = new Core(context);
 
-  const image = await util.loader.loadImage(data.brushMap.ink.src);
+function createBrush() {
+  const dot = document.createElement('canvas');
+  dot.width = 80;
+  dot.height = 80;
+  const ctx = dot.getContext('2d');
+  
+  var gradient = ctx.createRadialGradient(40, 40, 40, 40, 40, 0);
+  gradient.addColorStop(0, "transparent");
+  gradient.addColorStop(1, "#000000");
+  ctx.fillStyle = gradient;
+  
+  ctx.beginPath();
+  ctx.arc(40, 40, 40, Math.PI * 0, Math.PI * 2, true)
+  ctx.closePath();
+  ctx.fill(); 
+  // TODO
+  // document.querySelector('body').appendChild(dot);
+  return dot;
+}
+
+
+function draw(canvas, opts = {}) {
+  const width = 500;
+  const height = 500;
+  const devicePixelRatio = opts.devicePixelRatio || 1;
+  canvas.width = width * devicePixelRatio;
+  canvas.height = height * devicePixelRatio;
+  canvas.setAttribute('style', `width: ${width}; height: ${height};`)
+  const context = canvas.getContext('2d');
+  const core = new Core(context, { devicePixelRatio: devicePixelRatio });
   
   data.paths.forEach(async (path) => {
+
     core.setBrush({
-      name: 'ink',
-      pattern: image,
+      name: 'dot',
+      pattern: createBrush(),
       maxSize: path.size,
       minSize: 0,
     });
 
     core.setColor('#007fff');
-    core.setPressure(0.3);
+    core.setPressure(0.4);
     core.setBackgroundColor('#ffffff');
     
-    // core.setColor(0x000000);
-
     path.positions.forEach(async (p, i) => {
       if (i === 0) {
         core.drawStart();
@@ -37,6 +61,11 @@ async function main() {
       }
     });
   });
+}
+
+function main() {
+  draw(document.querySelector('#canvas'), { devicePixelRatio: 1 })
+  draw(document.querySelector('#canvas-2'), { devicePixelRatio: 2 })
 }
 
 main();
