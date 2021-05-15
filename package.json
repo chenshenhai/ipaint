@@ -7,7 +7,7 @@
     "snapshot": "node ./scripts/build.js && node ./scripts/snapshot.js",
     "e2e": "mocha --exit ./__tests__/e2e.test.js",
     "init": "lerna bootstrap --npm-client=cnpm",
-    "clear": "rm -rf ./packages/*/node_modules/",
+    "clear": "rm -rf ./packages/*/dist/ & rm -rf ./packages/*/node_modules/",
     "jest": "jest --config jest.config.js",
     "test": "lerna bootstrap --no-ci && npm run build && npm run jest && npm run e2e"
   },

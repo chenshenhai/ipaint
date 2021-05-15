@@ -8,6 +8,18 @@ const DEFAULT_SIZE = 20;
 
 const { toColorHexNum } = util.color;
 
+type TypeCoreOpts = {
+  devicePixelRatio?: number 
+}
+
+type TypePrivateCoreOpts = {
+  devicePixelRatio: number
+} & TypeCoreOpts;
+
+const defaultOpts = {
+  devicePixelRatio: 1
+}
+
 export default class Core {
 
   private _ctx: CanvasRenderingContext2D;
@@ -16,10 +28,13 @@ export default class Core {
   private _positions: TypeDataPosition[];
   private _prevPosition: TypeDataPosition|null;
   private _prevBrushSize: number = 0;
+  private _opts: TypePrivateCoreOpts = defaultOpts;
   
-  constructor(ctx: CanvasRenderingContext2D) {
+  constructor(ctx: CanvasRenderingContext2D, opts?: TypeCoreOpts) {
+    if (opts) {
+      this._opts = { ...defaultOpts, ...opts, };
+    }
     this._ctx = ctx;
-
     this._inertanceNum = 10;
     this._positions = [];
     this._prevPosition = null;
@@ -104,7 +119,7 @@ export default class Core {
       return;
     }
     const ctx = this._ctx;
-    let pos = this._getBufferedCurrentPosition();
+    const pos = this._getBufferedCurrentPosition();
     if (pos == null) return;
 
     if (this._prevPosition == null) {
@@ -112,8 +127,8 @@ export default class Core {
     }
     
     let t = (pos.t - this._prevPosition.t);
-    let distance = this._getDistance(pos, this._prevPosition);
-    let velocity = distance / Math.max(1, t);
+    const distance = this._resetDeviceSize(this._getDistance(pos, this._prevPosition));
+    const velocity = distance / Math.max(1, t);
     const curve = function(velocity: number, size: number, sizeNegative: number, pressureRatio: number) {
       return sizeNegative * velocity / pressureRatio + size;
     }
@@ -150,14 +165,15 @@ export default class Core {
       return;
     }
     let t = 0;
-    let brushDelta = (brushSize - (this._prevBrushSize || 0));
+    let brushDelta = brushSize - (this._prevBrushSize || 0);
   
     while (t < 1) {
-      let brushSizeCur = Math.min((this._prevBrushSize || 0) + (brushDelta * t), this._brushPoint.maxSize);
+      let brushSizeCur = this._resetDeviceSize(Math.min((this._prevBrushSize || 0) + (brushDelta * t), this._brushPoint.maxSize));
       let pos = this._getInterlatePos(startPos, endPos, t);
       // if (Math.random() > 0.2) {
-        let px = pos.x;
-        let py = pos.y;
+        let px = this._resetDeviceSize(pos.x);
+        let py = this._resetDeviceSize(pos.y);
+        // console.log(px, pos.x)
         ctx.drawImage(this._brushPoint.pattern, px, py, brushSizeCur, brushSizeCur);
       // }
       t += 1 / distance;
@@ -196,4 +212,7 @@ export default class Core {
     return ( p.x > 0 && p.y > 0 && p.t > 0)
   }
 
+  private _resetDeviceSize(num: number): number {
+    return num * this._opts.devicePixelRatio
+  }
 }
