@@ -1,7 +1,7 @@
 
 export const DEFAULT_COLOR = '#000000';
 
-export const DEFAULT_BRUSH = 'ink';
+export const DEFAULT_BRUSH = 'default';
 
 export const DEFAULT_SIZE = 40;
 

@@ -1,19 +1,19 @@
 import { TypeDataPosition } from '@idraw/types'
 
-interface DrawEventArgMap {
+export interface TypeDrawEventArgMap {
   'draw': TypeDataPosition;
   "drawStart": TypeDataPosition;
   "drawEnd": TypeDataPosition;
 }
 
-interface TypeDrawEvent {
-  on<T extends keyof DrawEventArgMap >(key: T, callback: (p: DrawEventArgMap[T]) => any): void
-  off<T extends keyof DrawEventArgMap >(key: T, callback: (p: DrawEventArgMap[T]) => any): void
-  trigger<T extends keyof DrawEventArgMap >(key: T, p: DrawEventArgMap[T]): void
+export interface TypeDrawEvent {
+  on<T extends keyof TypeDrawEventArgMap >(key: T, callback: (p: TypeDrawEventArgMap[T]) => any): void
+  off<T extends keyof TypeDrawEventArgMap >(key: T, callback: (p: TypeDrawEventArgMap[T]) => any): void
+  trigger<T extends keyof TypeDrawEventArgMap >(key: T, p: TypeDrawEventArgMap[T]): void
 }
 
 
-export default class EventEmitter implements TypeDrawEvent {
+export class DrawEvent implements TypeDrawEvent {
 
   private _listeners: Map<string, Function[]>;
 
@@ -21,7 +21,7 @@ export default class EventEmitter implements TypeDrawEvent {
     this._listeners = new Map();
   }
 
-  on<T extends keyof DrawEventArgMap >(eventKey: T, callback: (p: DrawEventArgMap[T]) => any) {
+  on<T extends keyof TypeDrawEventArgMap >(eventKey: T, callback: (p: TypeDrawEventArgMap[T]) => any) {
     if (this._listeners.has(eventKey)) {
       const callbacks = this._listeners.get(eventKey);
       callbacks?.push(callback);
@@ -31,7 +31,7 @@ export default class EventEmitter implements TypeDrawEvent {
     }
   }
   
-  off<T extends keyof DrawEventArgMap >(eventKey: T, callback: (p: DrawEventArgMap[T]) => any) {
+  off<T extends keyof TypeDrawEventArgMap >(eventKey: T, callback: (p: TypeDrawEventArgMap[T]) => any) {
     if (this._listeners.has(eventKey)) {
       const callbacks = this._listeners.get(eventKey);
       if (Array.isArray(callbacks)) {
@@ -46,7 +46,7 @@ export default class EventEmitter implements TypeDrawEvent {
     }
   }
 
-  trigger<T extends keyof DrawEventArgMap >(eventKey: T, arg: DrawEventArgMap[T]) {
+  trigger<T extends keyof TypeDrawEventArgMap >(eventKey: T, arg: TypeDrawEventArgMap[T]) {
     let callbacks = this._listeners.get(eventKey);
     if (Array.isArray(callbacks)) {
       callbacks.forEach((cb) => {
@@ -56,6 +56,16 @@ export default class EventEmitter implements TypeDrawEvent {
     } else {
       return false;
     }
+  }
+
+  has(name: string) {
+    if (this._listeners.has(name)) {
+      const list: Function[] | undefined = this._listeners.get(name);
+      if (Array.isArray(list) && list.length > 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

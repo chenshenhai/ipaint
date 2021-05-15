@@ -4,12 +4,12 @@ import {
 } from '@idraw/types';
 import util from '@idraw/util';
 import Core from '@idraw/core';
-import brush from '@idraw/brush';
 import { Watcher } from './util/watcher';
 import Container from './container';
 import { parseMaskToCanvasPosition } from './util/parse';
 import { DEFAULT_BG_COLOR, DEFAULT_COLOR, DEFAULT_SIZE, DEFAULT_BRUSH, DEFAULT_PRESSURE } from './util/constant';
-import EventEmitter from './util/draw-event';
+import { DrawEvent, TypeDrawEventArgMap } from './util/draw-event';
+import { createDefaultBrushPattern } from './util/brush';
 
 // import './css/index.less';
 
@@ -46,8 +46,7 @@ export default class Board {
   private _patternMap: {[name: string]: HTMLImageElement | HTMLCanvasElement} = {};
   private _status: StatusType = 'ALLOW_DRAWING';
   private _prevPosition?: TypeDataPosition;
-  private _facsimileImage?: string;
-  private _event: EventEmitter;
+  private _event: DrawEvent;
 
   constructor(dom: HTMLElement, opts: Options) {
     this._opts = { ...defaultOpts, ...opts }
@@ -62,10 +61,11 @@ export default class Board {
     this._core = new Core(this._context, { devicePixelRatio: this._opts.devicePixelRatio });
     this._core.setBackgroundColor(DEFAULT_BG_COLOR);
     this._data = { brushMap: {}, paths: [] };
-    this._event = new EventEmitter();
+    this._event = new DrawEvent();
+    this.addBrushPattern(DEFAULT_BRUSH, createDefaultBrushPattern());
   }
 
-  async ready() {
+  async start() {
     if (this._isStart === true) {
       return;
     }
@@ -106,16 +106,18 @@ export default class Board {
       this._prevPosition = undefined;
       this._event.trigger('drawEnd', p);
     });
-
-    await this.loadBrush({ name: 'ink', src: brush.ink.src});
-    await this.loadBrush({ name: 'light', src: brush.light.src });
-
     this.useBrush(DEFAULT_BRUSH, {
       size: DEFAULT_SIZE,
       color: DEFAULT_COLOR,
       pressure: DEFAULT_PRESSURE
     });
     this._isStart = true;
+  }
+
+  on<T extends keyof TypeDrawEventArgMap >(eventKey: T, callback: (p: TypeDrawEventArgMap[T]) => any) {
+    if (this._event.has(eventKey) === false) {
+      this._event.on(eventKey, callback);
+    }
   }
 
   async loadBrush(opts: TypeBrushOptions) {
@@ -126,6 +128,10 @@ export default class Board {
 
   setBrushSize(size: number) {
     this._core.setSize(size);
+  }
+
+  addBrushPattern(name: string, pattern: HTMLImageElement | HTMLCanvasElement) {
+    this._patternMap[name] = pattern;
   }
 
   useBrush(
@@ -153,9 +159,7 @@ export default class Board {
     if (this._data.paths.length > 0) {
       this._data.paths.pop();
     }
-    if (!this._facsimileImage) {
-      this._core.setBackgroundColor(DEFAULT_BG_COLOR);
-    }
+    this._core.setBackgroundColor(DEFAULT_BG_COLOR);
     this.redraw();
   }
 
