@@ -173,7 +173,6 @@ export default class Core {
       // if (Math.random() > 0.2) {
         let px = this._resetDeviceSize(pos.x);
         let py = this._resetDeviceSize(pos.y);
-        // console.log(px, pos.x)
         ctx.drawImage(this._brushPoint.pattern, px, py, brushSizeCur, brushSizeCur);
       // }
       t += 1 / distance;

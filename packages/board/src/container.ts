@@ -1,4 +1,4 @@
-import { setStyle } from './util/style';
+import { setStyle, getDomTransform, setDomTransform } from './util/style';
 
 type Options = {
   width: number;
@@ -21,6 +21,7 @@ export default class Container {
   private _wrapper: HTMLDivElement;
   private _mask: HTMLDivElement;
   private _canvas: HTMLCanvasElement; 
+  private _canvasScaleRatio: number = 1;
   private _isReady: boolean = false; 
 
   constructor(dom: HTMLElement, opts: Options) {
@@ -34,9 +35,6 @@ export default class Container {
     this._canvas.width = width * this._opts.devicePixelRatio;
     this._canvas.height = height * this._opts.devicePixelRatio;
 
-    // this._wrapper.classList.add('idraw-board-wrapper');
-    // this._mask.classList.add('idraw-board-mask');
-    // this._canvas.classList.add('idraw-board-canvas');
     setStyle(this._wrapper, {
       width: `${width}px`,
       height: `${height}px`,
@@ -79,5 +77,23 @@ export default class Container {
     return this._mask;
   }
 
+  public moveCanvas(x: number, y: number) {
+    const matrix = getDomTransform(this._canvas);
+    matrix.translateX = matrix.translateX + x;
+    matrix.translateY = matrix.translateY + y;
+    setDomTransform(this._canvas, matrix);
+  }
+
+  public setCanvasScale(scale: number) {
+    const transform = getDomTransform(this._canvas);
+    transform.scaleX = scale;
+    transform.scaleY = scale;
+    setDomTransform(this._canvas, transform);
+    this._canvasScaleRatio = scale;
+  }
+
+  public getCanvasScale(): number {
+    return this._canvasScaleRatio;
+  }
 
 }
