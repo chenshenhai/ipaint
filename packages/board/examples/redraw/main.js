@@ -10,7 +10,7 @@ async function main() {
     devicePixelRatio: window.devicePixelRatio
   });
   
-  idraw.ready().then(() => {
+  idraw.start().then(() => {
     console.log('idraw ready!');
   }).catch((err) => {
     console.log(err);

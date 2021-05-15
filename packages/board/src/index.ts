@@ -154,6 +154,10 @@ export default class Board {
     return this._data;
   }
 
+  setData(data: TypeData) {
+    this._data = data;
+  }
+
   undo() {
     this._core.clear();
     if (this._data.paths.length > 0) {
