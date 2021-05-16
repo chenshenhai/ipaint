@@ -1,4 +1,5 @@
 import Board from '@idraw/paint-board';
+import { TypeDataPosition } from '@idraw/paint-types';
 import { setStyle } from './util/style';
 import { Progress } from './components/progress';
 import { ActionSheet } from './components/action-sheet';
@@ -34,6 +35,7 @@ export default class Container {
   private _isReady: boolean = false;
   private _scaleProgress?: Progress;
   private _canvasScaleRatio: number = 1;
+  private _prevPosition?: TypeDataPosition;
 
   private _actionColor?: ActionSheet;
   private _actionSize?: ActionSheet;
@@ -64,6 +66,28 @@ export default class Container {
     }
     this._board.render();
     this._board.setCanvasScale(this._canvasScaleRatio);
+    
+    this._board.on('drawStart', (p) => {
+      if (this._board.isScaleStatus()) {
+        if (!this._prevPosition) {
+          this._prevPosition = p
+        }
+      }
+    });
+    this._board.on('draw', (p) => {
+      if (this._board.isScaleStatus()) {
+        const prevP = this._prevPosition;
+        if (prevP) {
+          const moveX = p.x - prevP.x;
+          const moveY = p.y - prevP.y;
+          this._board.moveCanvas(moveX, moveY);
+        }
+        this._prevPosition = p;
+      }
+    });
+    this._board.on('drawEnd', () => {
+      this._prevPosition = undefined;
+    });
     this._dom.appendChild(this._wrapper);
     this._initHeader();
     this._initFooter();
@@ -125,14 +149,6 @@ export default class Container {
     }
   }
 
-  // public setCanvasBackgroundImage(src: string) {
-  //   setStyle(this._canvas, {
-  //     'background': `url(${src}) no-repeat`,
-  //     'background-position': 'center',
-  //     'background-size': `${this._canvas.width}px`
-  //   })
-  // }
-
   // private _scaleCanvas(scale: number) {
   //   const transform = getDomTransform(this._canvas);
   //   transform.scaleX = scale;
@@ -179,7 +195,7 @@ export default class Container {
       onChange: (data: any) => {
         if (data && data.value > 0) {
           this._canvasScaleRatio = data.value / 100;
-          // this._scaleCanvas(this._canvasScaleRatio);
+          this._board.setCanvasScale(this._canvasScaleRatio);
         }
       }
     });
@@ -271,6 +287,57 @@ export default class Container {
       console.log('data ===', data);
     })
 
+    eventHub.on(eventCode.SCALE_CANVAS, (canScale?: boolean) => {
+      if (typeof canScale === 'boolean') {
+        if (canScale === true) {
+          this._board.allowScale(true);
+          this.showScaleProgress(true);
+        } else {
+          this._board.allowScale(false);
+          this.showScaleProgress(false);
+        }
+      } else if (this._board.isScaleStatus() !== true) {
+        this._board.allowScale(true);
+        this.showScaleProgress(true);
+      } else {
+        this._board.allowScale(false);
+        this.showScaleProgress(false);
+      }
+    });
+    // eventHub.on(eventCode.SHOW_COLOR_SELECTOR, (isShow: boolean = true) => {
+    //   this._container.showActionColor(isShow);
+    // });
+    // eventHub.on(eventCode.SHOW_SIZER, (isShow: boolean = true) => {
+    //   this._container.showActionSize(isShow);
+    // });
+    // eventHub.on(eventCode.SHOW_BRUSH_SELECTOR, (isShow: boolean = true) => {
+    //   this._container.showActionBrush(isShow);
+    // });
+    // eventHub.on(eventCode.SHOW_PRESSURE, (isShow: boolean = true) => {
+    //   this._container.showActionPressure(isShow);
+    // });
+    // eventHub.on(eventCode.UNDO, () => {
+    //   this.undo();
+    // });
+    // eventHub.on(eventCode.CLEAR_ACTION, () => {
+    //   eventHub.trigger(eventCode.SHOW_COLOR_SELECTOR, false);
+    // });
+    // eventHub.on(eventCode.SET_COLOR, (color: string) => {
+    //   this._core.setColor(color);
+    // });
+    // eventHub.on(eventCode.SET_SIZE, (size: number) => {
+    //   this._core.setSize(size);
+    // });
+    // eventHub.on(eventCode.SET_BRUSH, (brushName: string) => {
+    //   this.useBrush(brushName, {
+    //     color: this._core.getColor(),
+    //     size: this._core.getSize(),
+    //     pressure: this._core.getPressure(),
+    //   })
+    // });
+    // eventHub.on(eventCode.SET_PRESSURE, (pressure: number) => {
+    //   this._core.setPressure(pressure);
+    // })
   }
 
 }

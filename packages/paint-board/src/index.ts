@@ -236,9 +236,25 @@ export default class Board {
       this._status = 'NOT_ALLOW_DRAWING'
     }
   }
+  
+  allowScale(status: boolean) {
+    if (status === true) {
+      this._status = 'SCALE_CANVAS'
+    } else {
+      this._status = 'ALLOW_DRAWING'
+    }
+  }
+
+  isScaleStatus() {
+    return this._status === 'SCALE_CANVAS'
+  }
 
   setCanvasScale(scale: number) {
     this._container.setCanvasScale(scale);
+  }
+
+  moveCanvas(x: number, y: number) {
+    this._container.moveCanvas(x, y)
   }
 
   download(filename?: string) {
