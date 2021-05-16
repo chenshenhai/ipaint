@@ -54,7 +54,7 @@ export class Watcher implements TypeWatcher {
     const mouseupEvent = new MouseEvent('mouseup');
     document.querySelector('body')?.addEventListener('mousemove', (e) => {
       // @ts-ignore
-      if (e && e.path && e.path[0] !== canvas) {
+      if (e && e.path && e.path[0] !== touch) {
         if (this._isPainting === true) {
           touch.dispatchEvent(mouseupEvent);
         }
