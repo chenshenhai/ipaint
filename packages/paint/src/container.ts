@@ -8,6 +8,7 @@ import { Color } from './modules/color';
 import { Size } from './modules/size';
 import { Brush } from './modules/brush';
 import { Pressure } from './modules/pressure';
+import { eventCode, eventHub } from './service/event';
 
 type Options = {
   width: number;
@@ -67,6 +68,7 @@ export default class Container {
     this._initHeader();
     this._initFooter();
     this._initComponents();
+    this._initGlobalEvent();
     this._isReady = true;
   }
 
@@ -139,6 +141,9 @@ export default class Container {
   // }
 
   private _initFooter() {
+    if (this._isReady === true) {
+      return;
+    }
     this._wrapper.appendChild(this._footer);
     this._footer.classList.add('idraw-board-footer');
     const menu = new Menu({ mount: this._footer });
@@ -146,6 +151,9 @@ export default class Container {
   }
 
   private _initHeader() {
+    if (this._isReady === true) {
+      return;
+    }
     this._wrapper.appendChild(this._header);
     this._header.classList.add('idraw-board-header');
     const nav = new Nav({ mount: this._header });
@@ -153,6 +161,9 @@ export default class Container {
   }
 
   private _initComponents() {
+    if (this._isReady === true) {
+      return;
+    }
     this._scaleProgress = new Progress({
       mount: this._wrapper,
       max: 100,
@@ -238,6 +249,28 @@ export default class Container {
         sizer.render();
       }
     });
+  }
+
+  private _initGlobalEvent() {
+    if (this._isReady === true) {
+      return;
+    }
+    const board = this._board;
+    eventHub.on(eventCode.BOARD_CLEAR, () => {
+      board.clear();
+    });
+    eventHub.on(eventCode.UNDO, () => {
+      board.undo();
+    });
+    eventHub.on(eventCode.DOWNLOAD, () => {
+      board.download('paint');
+    });
+    eventHub.on(eventCode.LOG_DATA, () => {
+      const data = board.getData();
+      // TODO
+      console.log('data ===', data);
+    })
+
   }
 
 }

@@ -31,6 +31,7 @@ const defaultOpts = {
 }
 
 const { loadImage } = util.loader;
+const { downloadImageFromCanvas } = util.file;
 
 type StatusType = 'SCALE_CANVAS' | 'ALLOW_DRAWING' | 'NOT_ALLOW_DRAWING'
 
@@ -160,7 +161,7 @@ export default class Board {
   }
 
   getData() {
-    return this._data;
+    return JSON.parse(JSON.stringify(this._data));
   }
 
   setData(data: TypeData) {
@@ -195,6 +196,12 @@ export default class Board {
     }
     this._core.setBackgroundColor(DEFAULT_BG_COLOR);
     this.redraw();
+  }
+
+  clear() {
+    this._data.paths = [];
+    this._core.clear();
+    this._core.setBackgroundColor(DEFAULT_BG_COLOR);
   }
 
   redraw() {
@@ -234,6 +241,10 @@ export default class Board {
     this._container.setCanvasScale(scale);
   }
 
+  download(filename?: string) {
+    downloadImageFromCanvas(this._canvas, {filename: `${filename || 'idraw'}.png`, type: 'image/png'});
+  }
+
   private _parseOpts(opts: Options): Options & PrivateOpts {
     const options = {
       ...defaultOpts, 
@@ -245,6 +256,7 @@ export default class Board {
     };
     return options;
   }
+
 }
 
 
