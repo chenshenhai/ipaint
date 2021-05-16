@@ -28,7 +28,7 @@ const defaultOpts = {
 
 const { loadImage } = util.loader;
 
-type StatusType = 'SCALE_CANVAS' | 'ALLOW_DRAWING'
+type StatusType = 'SCALE_CANVAS' | 'ALLOW_DRAWING' | 'NOT_ALLOW_DRAWING'
 
 export default class Board {
 
@@ -139,7 +139,8 @@ export default class Board {
     opts: { size: number, color: string, pressure: number }
   ) {
     const { size, color, pressure } = opts;
-    const image = this._patternMap[name];
+    const image = this._patternMap[name] || this._patternMap[DEFAULT_BRUSH];
+
     this._core.setBrush({
       name,
       pattern: image,
@@ -156,6 +157,27 @@ export default class Board {
 
   setData(data: TypeData) {
     this._data = data;
+  }
+
+  async prepare() {
+    const brushMap = this._data.brushMap;
+    const names = Object.keys(brushMap);
+    const promises: Promise<HTMLImageElement>[] = [];
+    names.forEach((name) => {
+      promises.push(loadImage(brushMap[name].src));
+    });
+    
+    return new Promise((resolve, reject) => {
+      Promise.all(promises).then((imgs) => {
+        names.forEach((name, idx) => {
+          this._patternMap[name] = imgs[idx];
+        });
+        resolve(true);
+      }).then((err) => {
+        reject(err);
+      })
+    });
+
   }
 
   undo() {
@@ -190,6 +212,14 @@ export default class Board {
         }
       });
     })
+  }
+
+  allowDraw(status: boolean) {
+    if (status === true) {
+      this._status = 'ALLOW_DRAWING'
+    } else {
+      this._status = 'NOT_ALLOW_DRAWING'
+    }
   }
 
 }

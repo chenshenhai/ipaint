@@ -11,7 +11,7 @@ async function main() {
   });
 
   board.start();
-  board.on('draw', console.log);
+  // board.on('draw', console.log);
   
   // board.start().then(() => {
   //   console.log('idraw ready!');
