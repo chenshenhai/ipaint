@@ -3,6 +3,8 @@ import { setStyle, getDomTransform, setDomTransform } from './util/style';
 type Options = {
   width: number;
   height: number;
+  canvasWidth: number;
+  canvasHeight: number;
   devicePixelRatio?: number;
 }
 
@@ -27,13 +29,13 @@ export default class Container {
   constructor(dom: HTMLElement, opts: Options) {
     this._dom = dom;
     this._opts = { ...defaultOpts, ...opts};
-    const { width, height, } = this._opts;
+    const { width, height, canvasWidth, canvasHeight } = this._opts;
     this._wrapper= document.createElement('div');
     this._mask = document.createElement('div');
     this._canvas = document.createElement('canvas');
 
-    this._canvas.width = width * this._opts.devicePixelRatio;
-    this._canvas.height = height * this._opts.devicePixelRatio;
+    this._canvas.width = canvasWidth * this._opts.devicePixelRatio;
+    this._canvas.height = canvasHeight * this._opts.devicePixelRatio;
 
     setStyle(this._wrapper, {
       width: `${width}px`,
@@ -45,8 +47,8 @@ export default class Container {
       overflow: 'hidden',
     });
     setStyle(this._canvas, {
-      width: `${width}px`,
-      height: `${height}px`,
+      width: `${canvasWidth}px`,
+      height: `${canvasHeight}px`,
       // transform: 'scale(1.0)',
       transform: 'matrix(1, 0, 0, 1, 0, 0)',
       display: 'flex',

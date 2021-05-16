@@ -16,10 +16,14 @@ import { createDefaultBrushPattern } from './util/brush';
 type Options = {
   width: number;
   height: number;
+  canvasWidth?: number;
+  canvasHeight?: number;
 }
 
 type PrivateOpts = {
-  devicePixelRatio: number
+  devicePixelRatio: number;
+  canvasWidth: number;
+  canvasHeight: number;
 } & Options;
 
 const defaultOpts = {
@@ -49,7 +53,7 @@ export default class Board {
   private _event: DrawEvent;
 
   constructor(dom: HTMLElement, opts: Options & PrivateOpts) {
-    this._opts = { ...defaultOpts, ...opts }
+    this._opts = this._parseOpts(opts);
     this._dom = dom;
     this._container = new Container(this._dom, {
       ...this._opts,
@@ -57,7 +61,10 @@ export default class Board {
     this._mask = this._container.getMask();
     this._canvas = this._container.getCanvas();
     this._context = this._canvas.getContext('2d') as CanvasRenderingContext2D;
-    this._watcher = new Watcher(this._mask);
+    this._watcher = new Watcher({
+      touch: this._mask,
+      canvas: this._canvas,
+    });
     this._core = new Core(this._context, { devicePixelRatio: this._opts.devicePixelRatio });
     this._core.setBackgroundColor(DEFAULT_BG_COLOR);
     this._data = { brushMap: {}, paths: [] };
@@ -73,6 +80,7 @@ export default class Board {
     const watcher = this._watcher;
     const core = this._core;
     watcher.onDrawStart((p) => {
+
       if (this._status === 'ALLOW_DRAWING') {
         core.drawStart()
       } else if (this._status === 'SCALE_CANVAS') {
@@ -226,7 +234,17 @@ export default class Board {
     this._container.setCanvasScale(scale);
   }
 
-
+  private _parseOpts(opts: Options): Options & PrivateOpts {
+    const options = {
+      ...defaultOpts, 
+      ...{
+        canvasHeight: opts.height,
+        canvasWidth: opts.width,
+      },
+      ...opts
+    };
+    return options;
+  }
 }
 
 
