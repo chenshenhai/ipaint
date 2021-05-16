@@ -10,7 +10,7 @@ const resolveFile = function(names = []) {
 }
 
 const modules = [];
-const external = [ '@idraw/util', '@idraw/core' ];
+const external = [ '@idraw/paint-util', '@idraw/paint-core' ];
 
 for(let i = 0; i < packages.length; i++) {
   const pkg = packages[i];

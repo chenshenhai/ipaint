@@ -1,20 +1,20 @@
 module.exports = {
   packages: [
     {
-      dirName: 'util',
-      globalName: 'iDraw.util',
+      dirName: 'paint-util',
+      globalName: 'iDraw.PaintUtil',
     },
     {
-      dirName: 'core',
-      globalName: 'iDraw.Core',
+      dirName: 'paint-core',
+      globalName: 'iDraw.PaintCore',
     },
     {
-      dirName: 'board',
-      globalName: 'iDraw.Board',
+      dirName: 'paint-board',
+      globalName: 'iDraw.PaintBoard',
     },
     {
-      dirName: 'idraw',
-      globalName: 'iDraw.IDraw',
+      dirName: 'paint',
+      globalName: 'iDraw.Paint',
     },
     // {
     //   dirName: 'demo-data',

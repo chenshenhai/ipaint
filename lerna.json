@@ -1,10 +1,10 @@
 {
   "packages": [
-    "packages/types",
-    "packages/util",
-    "packages/core",
-    "packages/idraw",
-    "packages/board"
+    "packages/paint-types",
+    "packages/paint-util",
+    "packages/paint-core",
+    "packages/paint-board",
+    "packages/paint"
   ],
-  "version": "0.0.2"
+  "version": "0.0.1"
 }
