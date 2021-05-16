@@ -10,7 +10,7 @@ async function main() {
     devicePixelRatio: window.devicePixelRatio
   });
 
-  board.start();
+  board.render();
   // board.on('draw', console.log);
   
   // board.start().then(() => {

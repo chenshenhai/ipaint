@@ -47,7 +47,8 @@ export default class Container {
     setStyle(this._canvas, {
       width: `${width}px`,
       height: `${height}px`,
-      transform: 'scale(1.0)',
+      // transform: 'scale(1.0)',
+      transform: 'matrix(1, 0, 0, 1, 0, 0)',
       display: 'flex',
     });
     setStyle(this._mask, {

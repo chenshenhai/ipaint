@@ -1,4 +1,5 @@
-import { setStyle, getDomTransform, setDomTransform } from './util/style';
+import Board from '@idraw/paint-board';
+import { setStyle } from './util/style';
 import { Progress } from './components/progress';
 import { ActionSheet } from './components/action-sheet';
 import { Menu } from './modules/menu';
@@ -23,9 +24,10 @@ export default class Container {
 
   private _opts: Options;
   private _dom: HTMLElement;
+  private _board: Board;
   private _wrapper: HTMLDivElement;
-  private _mask: HTMLDivElement;
-  private _canvas: HTMLCanvasElement;
+  // private _mask: HTMLDivElement;
+  // private _canvas: HTMLCanvasElement;
   private _header: HTMLDivElement;
   private _footer: HTMLDivElement;
   private _isReady: boolean = false;
@@ -41,49 +43,43 @@ export default class Container {
     this._dom = dom;
     this._opts = opts;
     const { width, height, canvasWidth, canvasHeight } = this._opts;
+    
     this._wrapper= document.createElement('div');
-    this._mask = document.createElement('div');
-    this._canvas = document.createElement('canvas');
     this._header = document.createElement('div');
     this._footer = document.createElement('div');
     this._canvasScaleRatio = Math.min(1, 1 / Math.max(canvasWidth / width, canvasHeight / height));
-    this._canvas.width = canvasWidth;
-    this._canvas.height = canvasHeight;
     this._wrapper.classList.add('idraw-board-wrapper');
-    this._mask.classList.add('idraw-board-mask');
-    this._canvas.classList.add('idraw-board-canvas');
     setStyle(this._wrapper, { width: `${width}px`, height: `${height}px`});
-    setStyle(this._canvas, { width: `${canvasWidth}px`, height: `${canvasHeight}px`, transform: 'scale(1.0)' });
+    this._board = new Board(this._wrapper, {
+      width: canvasWidth,
+      height: canvasHeight,
+      devicePixelRatio: window.devicePixelRatio,
+    });
   }
  
   public render() {
     if (this._isReady === true) {
       return;
     }
-    this._wrapper.appendChild(this._canvas);
-    this._wrapper.appendChild(this._mask);
+    this._board.render();
+    this._board.setCanvasScale(this._canvasScaleRatio);
     this._dom.appendChild(this._wrapper);
     this._initHeader();
     this._initFooter();
     this._initComponents();
-
-    this._scaleCanvas(this._canvasScaleRatio);
     this._isReady = true;
   }
 
-  public getCanvas() {
-    return this._canvas;
-  }
 
-  public getMask() {
-    return this._mask;
-  }
+  // public moveCanvas(x: number, y: number) {
+  //   const matrix = getDomTransform(this._canvas);
+  //   matrix.translateX = matrix.translateX + x;
+  //   matrix.translateY = matrix.translateY + y;
+  //   setDomTransform(this._canvas, matrix);
+  // }
 
-  public moveCanvas(x: number, y: number) {
-    const matrix = getDomTransform(this._canvas);
-    matrix.translateX = matrix.translateX + x;
-    matrix.translateY = matrix.translateY + y;
-    setDomTransform(this._canvas, matrix);
+  public getBoard() {
+    return this._board;
   }
 
   public showScaleProgress(isShow: boolean = true) {
@@ -127,20 +123,20 @@ export default class Container {
     }
   }
 
-  public setCanvasBackgroundImage(src: string) {
-    setStyle(this._canvas, {
-      'background': `url(${src}) no-repeat`,
-      'background-position': 'center',
-      'background-size': `${this._canvas.width}px`
-    })
-  }
+  // public setCanvasBackgroundImage(src: string) {
+  //   setStyle(this._canvas, {
+  //     'background': `url(${src}) no-repeat`,
+  //     'background-position': 'center',
+  //     'background-size': `${this._canvas.width}px`
+  //   })
+  // }
 
-  private _scaleCanvas(scale: number) {
-    const transform = getDomTransform(this._canvas);
-    transform.scaleX = scale;
-    transform.scaleY = scale;
-    setDomTransform(this._canvas, transform);
-  }
+  // private _scaleCanvas(scale: number) {
+  //   const transform = getDomTransform(this._canvas);
+  //   transform.scaleX = scale;
+  //   transform.scaleY = scale;
+  //   setDomTransform(this._canvas, transform);
+  // }
 
   private _initFooter() {
     this._wrapper.appendChild(this._footer);
@@ -172,7 +168,7 @@ export default class Container {
       onChange: (data: any) => {
         if (data && data.value > 0) {
           this._canvasScaleRatio = data.value / 100;
-          this._scaleCanvas(this._canvasScaleRatio);
+          // this._scaleCanvas(this._canvasScaleRatio);
         }
       }
     });

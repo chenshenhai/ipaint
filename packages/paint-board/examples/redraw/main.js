@@ -10,7 +10,7 @@ async function main() {
     devicePixelRatio: window.devicePixelRatio
   });
   
-  board.start();
+  board.render();
   board.allowDraw(false);
   board.setData(demoData.basic);
   // board.redraw();

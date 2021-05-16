@@ -1,5 +1,5 @@
 {
-  "name": "@draw/paint",
+  "name": "@idraw/paint",
   "version": "0.0.1",
   "description": "a draw lib",
   "main": "dist/index.cjs.js",
@@ -29,6 +29,7 @@
     "index.js"
   ],
   "dependencies": {
+    "@idraw/paint-board": "^0.0.1",
     "@idraw/paint-core": "^0.0.1",
     "@idraw/paint-types": "^0.0.1",
     "@idraw/paint-util": "^0.0.1"

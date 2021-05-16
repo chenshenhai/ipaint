@@ -54,21 +54,25 @@ export function getDomTransform(dom: HTMLElement): {
   translateY: number;
 } {
   // transform: matrix( scaleX(), skewY(), skewX(), scaleY(), translateX(), translateY() )
-  // matrix(1, 2, -1, 1, 80, 80)
+  // matrix(1, 0, 0, 1, 0, 0)
   const style = getComputedStyle(dom) || {};
   const { transform } = style;
   const matrixStr = transform.replace(/^matrix\(|\)$/ig, '');
-  const matrixList = matrixStr.split(',').map((str) => {
+  const matrixList = matrixStr.split(',').map((str, i) => {
     const val = parseFloat(str);
-    return isNaN(val) ? 0 : val;
+    if ([0, 3].indexOf(i) >= 0) {
+      return isNaN(val) ? 1 : val;
+    } else {
+      return isNaN(val) ? 0 : val;
+    }
   });
   const matrix = {
     scaleX: matrixList[0],
-    skewY: matrixList[1],
-    skewX: matrixList[2],
-    scaleY: matrixList[3],
-    translateX: matrixList[4],
-    translateY: matrixList[5],
+    skewY: matrixList[1] || 0,
+    skewX: matrixList[2] || 0,
+    scaleY: matrixList[3] || 1,
+    translateX: matrixList[4] || 0,
+    translateY: matrixList[5] || 0,
   }
   return matrix;
 }
@@ -84,6 +88,7 @@ export function setDomTransform(dom: HTMLElement, matrix: {
 }) {
   // transform: matrix( scaleX(), skewY(), skewX(), scaleY(), translateX(), translateY() )
   // matrix(1, 2, -1, 1, 80, 80)
+
   const transform = `matrix(${matrix.scaleX}, ${matrix.skewY}, ${matrix.skewX}, ${matrix.scaleY}, ${matrix.translateX}, ${matrix.translateY})`;
   dom.style.setProperty('transform', transform);
 }

@@ -48,7 +48,7 @@ export default class Board {
   private _prevPosition?: TypeDataPosition;
   private _event: DrawEvent;
 
-  constructor(dom: HTMLElement, opts: Options) {
+  constructor(dom: HTMLElement, opts: Options & PrivateOpts) {
     this._opts = { ...defaultOpts, ...opts }
     this._dom = dom;
     this._container = new Container(this._dom, {
@@ -65,7 +65,7 @@ export default class Board {
     this.addBrushPattern(DEFAULT_BRUSH, createDefaultBrushPattern());
   }
 
-  async start() {
+  async render() {
     if (this._isStart === true) {
       return;
     }
@@ -221,6 +221,11 @@ export default class Board {
       this._status = 'NOT_ALLOW_DRAWING'
     }
   }
+
+  setCanvasScale(scale: number) {
+    this._container.setCanvasScale(scale);
+  }
+
 
 }
 
