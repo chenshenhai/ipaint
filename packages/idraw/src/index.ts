@@ -1,11 +1,11 @@
 import { TypeData, TypeBrushOptions, TypeDataPosition, TypeDataPath } from '@idraw/types';
 import util from '@idraw/util';
 import Core from '@idraw/core';
-import brush from '@idraw/brush';
 import { Watcher } from './util/watcher';
 import Container from './container';
 import { eventCode, eventHub } from './service/event';
 import { parseMaskToCanvasPosition } from './service/parse';
+import { createCircleBrushPattern, createGradientBrushPattern } from './util/brush';
 import { DEFAULT_BG_COLOR, DEFAULT_COLOR, DEFAULT_SIZE, DEFAULT_BRUSH, DEFAULT_PRESSURE } from './util/constant';
 
 import './css/index.less';
@@ -71,7 +71,11 @@ export default class Board {
     this._core = new Core(this._context);
     this._core.setBackgroundColor(DEFAULT_BG_COLOR);
     this._data = { brushMap: {}, paths: [] };
-    // this._patternMap: 
+    this._patternMap = {
+      circle: createCircleBrushPattern(),
+      gradient: createGradientBrushPattern(),
+    } 
+    
   }
 
   async ready() {
@@ -121,9 +125,6 @@ export default class Board {
       }
       this._prevPosition = undefined;
     });
-
-    await this.loadBrush({ name: 'ink', src: brush.ink.src});
-    await this.loadBrush({ name: 'light', src: brush.light.src });
 
     this.useBrush(DEFAULT_BRUSH, {
       size: DEFAULT_SIZE,

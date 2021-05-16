@@ -4,7 +4,6 @@
     "packages/util",
     "packages/core",
     "packages/idraw",
-    "packages/brush",
     "packages/board"
   ],
   "version": "0.0.2"

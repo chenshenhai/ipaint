@@ -1,6 +1,10 @@
 // import { eventCode, eventHub } from '../../service/event';
 // import './style.less';
-import brush from '@idraw/brush';
+// import brush from '@idraw/brush';
+import {
+  createGradientBrushPattern,
+  createCircleBrushPattern
+} from './../../util/brush';
 
 
 type ModOptions = {
@@ -8,12 +12,16 @@ type ModOptions = {
   onChange(name: BrushNameType): void;
 }
 
-type BrushNameType = ('ink' | 'light');
+type BrushNameType = ('circle' | 'gradient');
 
 const brushNameList: BrushNameType[] = [
-  'ink',
-  'light'
-]
+  'circle',
+  'gradient'
+];
+const brushMap = {
+  [brushNameList[0]]: createCircleBrushPattern(), 
+  [brushNameList[1]]: createGradientBrushPattern(), 
+}
 
 export class Brush {
 
@@ -37,14 +45,21 @@ export class Brush {
         <div class="idraw-board-brush-content">
           ${brushNameList.map((name: BrushNameType) => {
             return `
-            <div class="idraw-board-brush-item" data-brush-name="${name}">
-              <img class="idraw-board-brush-img" src="${brush[name].src}" />
-            </div>
+            <div class="idraw-board-brush-item" data-brush-name="${name}"></div>
             `;
           }).join('\r\n')}
         </div>
       </div>
     `;
+
+    brushNameList.forEach((name) => {
+      const elem = this._component.querySelector(`[data-brush-name="${name}"]`);
+      if (elem) {
+        brushMap[name].classList.add('idraw-board-brush-img')
+        elem.appendChild(brushMap[name]);
+      }
+    });
+
     this._mount.appendChild(this._component);
     this._onEvent();
     this._isMounted = true;

@@ -9,10 +9,6 @@ module.exports = {
       globalName: 'iDraw.Core',
     },
     {
-      dirName: 'brush',
-      globalName: 'iDraw.brush',
-    },
-    {
       dirName: 'board',
       globalName: 'iDraw.Board',
     },
