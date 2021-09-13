@@ -18,7 +18,7 @@
     "lib": ["ESNext", "dom"],
     "rootDir": ".",
     // "paths": {
-    //   "idraw": ["packages/idraw/src1"]
+    //   "ipaint": ["packages/ipaint/src1"]
     // }
   },
   "include": [

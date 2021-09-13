@@ -1,0 +1,38 @@
+{
+  "name": "ipaint",
+  "version": "0.0.2-alpha.2",
+  "description": "a draw lib",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "unpkg": "dist/index.global.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "rollup -w -c ./scripts/rollup.config.dev.js",
+    "build": "rollup -c ./scripts/rollup.config.prod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ipaint/paint.git"
+  },
+  "keywords": [
+    "draw",
+    "canvas"
+  ],
+  "author": "chenshenhai",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ipaint/paint/issues"
+  },
+  "homepage": "https://github.com/ipaint/paint#readme",
+  "files": [
+    "dist",
+    "index.js"
+  ],
+  "dependencies": {
+    "@ipaint/board": "^0.0.2-alpha.2",
+    "@ipaint/core": "^0.0.2-alpha.2",
+    "@ipaint/types": "^0.0.2-alpha.2",
+    "@ipaint/util": "^0.0.2-alpha.2"
+  },
+  "gitHead": "252f4dcc5716ad5d0471037a65681612ef913bf0"
+}

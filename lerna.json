@@ -1,10 +1,10 @@
 {
   "packages": [
-    "packages/paint-types",
-    "packages/paint-util",
-    "packages/paint-core",
-    "packages/paint-board",
-    "packages/paint"
+    "packages/types",
+    "packages/util",
+    "packages/core",
+    "packages/board",
+    "packages/ipaint"
   ],
-  "version": "0.0.1"
+  "version": "0.0.2-alpha.2"
 }

@@ -1,0 +1,18 @@
+{
+  "name": "@ipaint/types",
+  "version": "0.0.2-alpha.2",
+  "description": "",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {},
+  "author": "chenshenhai",
+  "license": "MIT",
+  "files": [
+    "src",
+    "index.ts"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "252f4dcc5716ad5d0471037a65681612ef913bf0"
+}

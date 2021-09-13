@@ -1,14 +1,12 @@
 {
-  "name": "@ipaint/demo-data",
-  "version": "0.0.1",
+  "name": "@ipaint/core",
+  "version": "0.0.2-alpha.2",
   "description": "",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "unpkg": "dist/index.global.js",
   "types": "dist/index.d.ts",
-  "scripts": {
-    "test": ""
-  },
+  "scripts": {},
   "author": "chenshenhai",
   "license": "MIT",
   "files": [
@@ -18,5 +16,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@ipaint/types": "^0.0.2-alpha.2"
+  },
+  "dependencies": {
+    "@ipaint/util": "^0.0.2-alpha.2"
+  },
+  "gitHead": "252f4dcc5716ad5d0471037a65681612ef913bf0"
 }
