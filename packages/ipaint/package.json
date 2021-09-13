@@ -1,6 +1,6 @@
 {
   "name": "ipaint",
-  "version": "0.0.2-alpha.1",
+  "version": "0.0.2-alpha.2",
   "description": "a draw lib",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
@@ -29,10 +29,10 @@
     "index.js"
   ],
   "dependencies": {
-    "@ipaint/board": "^0.0.2-alpha.1",
-    "@ipaint/core": "^0.0.2-alpha.1",
-    "@ipaint/types": "^0.0.2-alpha.1",
-    "@ipaint/util": "^0.0.2-alpha.1"
+    "@ipaint/board": "^0.0.2-alpha.2",
+    "@ipaint/core": "^0.0.2-alpha.2",
+    "@ipaint/types": "^0.0.2-alpha.2",
+    "@ipaint/util": "^0.0.2-alpha.2"
   },
-  "gitHead": "80ffdef91231ad237d3b026e35ab04b013f57a3f"
+  "gitHead": "252f4dcc5716ad5d0471037a65681612ef913bf0"
 }
