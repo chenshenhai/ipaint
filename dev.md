@@ -12,14 +12,14 @@ lerna publish --force-publish
 
 
 ```sh
-lerna add jest --scope=@idraw/util --dev
-lerna add babel-jest --scope=@idraw/util --dev
-lerna add @babel/core --scope=@idraw/util --dev
-lerna add @babel/preset-env --scope=@idraw/util --dev
+lerna add jest --scope=@ipaint/util --dev
+lerna add babel-jest --scope=@ipaint/util --dev
+lerna add @babel/core --scope=@ipaint/util --dev
+lerna add @babel/preset-env --scope=@ipaint/util --dev
 ```
 
 ```sh
-lerna add @idraw/paint-board --scope=@idraw/paint
-lerna add @idraw/paint-util --scope=@idraw/paint-board
-lerna add @idraw/paint-types --scope=@idraw/paint-board --dev
+lerna add @ipaint/board --scope=@ipaint/paint
+lerna add @ipaint/util --scope=@ipaint/board
+lerna add @ipaint/types --scope=@ipaint/board --dev
 ```
