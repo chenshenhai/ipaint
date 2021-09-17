@@ -1,6 +1,6 @@
 {
   "name": "@ipaint/board",
-  "version": "0.0.2-alpha.2",
+  "version": "0.0.2-alpha.3",
   "description": "a draw lib",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/ipaint/paint.git"
+    "url": "git+ssh://git@github.com/chenshenhai/ipaint.git"
   },
   "publishConfig": {
     "access": "public"
@@ -24,17 +24,17 @@
   "author": "chenshenhai",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ipaint/paint/issues"
+    "url": "https://github.com/chenshenhai/ipaint/issues"
   },
-  "homepage": "https://github.com/ipaint/paint#readme",
+  "homepage": "https://github.com/chenshenhai/ipaint#readme",
   "files": [
     "dist",
     "index.js"
   ],
   "dependencies": {
-    "@ipaint/core": "^0.0.2-alpha.2",
-    "@ipaint/types": "^0.0.2-alpha.2",
-    "@ipaint/util": "^0.0.2-alpha.2"
+    "@ipaint/core": "^0.0.2-alpha.3",
+    "@ipaint/types": "^0.0.2-alpha.3",
+    "@ipaint/util": "^0.0.2-alpha.3"
   },
   "gitHead": "252f4dcc5716ad5d0471037a65681612ef913bf0"
 }
