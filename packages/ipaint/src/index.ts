@@ -1,34 +1,13 @@
-import Container from './container';
-import './css/index.less';
+import Core from '@ipaint/core';
 
-type Options = {
-  width: number;
-  height: number;
-  canvasWidth: number;
-  canvasHeight: number;
+type TypeOptions = {
+  devicePixelRatio?: number;
+};
+
+class iPaint extends Core {
+  constructor(ctx: CanvasRenderingContext2D, opts?: TypeOptions) {
+    super(ctx, opts);
+  }
 }
 
-export default class Paint {
-
-  private _dom: HTMLElement;
-  private _container: Container;
-  private _isStart: boolean = false;
-  
-  constructor(dom: HTMLElement, opts: Options) {
-    this._dom = dom;
-    this._container = new Container(this._dom, {
-      ...opts,
-    });
-  }
-
-  async ready() {
-    if (this._isStart === true) {
-      return;
-    }
-    this._container.render();
-  }
-
-}
-
-
-
+export default iPaint
