@@ -8,7 +8,7 @@ async function main() {
     [
       '-w',
       '-c',
-      './scripts/rollup.config.js',
+      './scripts/rollup.config.cjs',
       `--target-pkg=${process.argv[2] || ''}`,
     ], { stdio: 'inherit' }
   )
