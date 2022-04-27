@@ -2,14 +2,14 @@
   "name": "root",
   "private": false,
   "scripts": {
-    "vite": "node ./scripts/dev/vite.js",
-    "dev": "node ./scripts/dev.js",
+    "dev": "node ./scripts/dev/vite.js",
+    "dev:rollup": "node ./scripts/dev.js",
     "build": "npm run build:src && npm run build:min",
     "build:src": "node ./scripts/build.js",
     "build:min": "node ./scripts/minify.js",
     "snapshot": "node ./scripts/build.js && node ./scripts/snapshot.js",
     "e2e": "mocha --exit ./__tests__/e2e.test.js",
-    "init": "lerna bootstrap --npm-client=cnpm",
+    "init": "lerna bootstrap --npm-client=cnpm && npm run build:src",
     "clear": "rm -rf ./packages/*/dist/ & rm -rf ./packages/*/node_modules/",
     "jest": "jest --config jest.config.js",
     "test": "lerna bootstrap --no-ci && npm run build && npm run jest && npm run e2e"

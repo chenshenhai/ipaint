@@ -18,7 +18,7 @@ async function main() {
   });
 
   await 
-  execa('rollup', [ '-c', './scripts/rollup.config.js', ], { stdio: 'inherit' });
+  execa('rollup', [ '-c', './scripts/rollup.config.cjs', ], { stdio: 'inherit' });
 
 }
 

@@ -12,17 +12,18 @@
           linear-gradient(#aaa 1px, transparent 0),
           linear-gradient(90deg, #aaa 1px, transparent 0);
         background-size: 10px 10px, 10px 10px, 50px 50px, 50px 50px;
-        width: 601px;
-        height: 601px;
       }
     </style>
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   </head>
   <body>
 
-    <canvas width="601" height="601" id="canvas" class="canvas-bg"></canvas>
+    <canvas id="canvas" class="canvas-bg"></canvas>
 
-    <script src="./../dist/index.js"></script>
-    <script type="module" src="./main.js"></script>
+    <canvas id="canvas-2" class="canvas-bg"></canvas>
+
+    <script src="../../../packages/core/dist/index.global.js"></script>
+    <script src="./../demo-data/src/basic.js"></script>
+    <script src="./main.js"></script>
   </body>
 </html>
