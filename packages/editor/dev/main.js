@@ -1,9 +1,8 @@
-
+import iPaintEditor from '../src/index'
 
 async function main() {
   const dom = document.querySelector('#ipaint');
-  const { iPaint } = window;
-  const ipaint = new iPaint(dom, {
+  const ipaint = new iPaintEditor(dom, {
     width: window.innerWidth,
     height: window.innerHeight,
 
