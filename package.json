@@ -2,7 +2,7 @@
   "name": "root",
   "private": false,
   "scripts": {
-    "vite": "node ./script/dev/vite.js",
+    "vite": "node ./scripts/dev/vite.js",
     "dev": "node ./scripts/dev.js",
     "build": "npm run build:src && npm run build:min",
     "build:src": "node ./scripts/build.js",
