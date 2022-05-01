@@ -6,15 +6,13 @@ import {
 // import util from '@ipaint/util';
 // const { throttle } = util.time;
 
-
 type Options = {
-  touch: HTMLDivElement;
   canvas: HTMLCanvasElement;
 }
 
 export class Watcher implements TypeWatcher {
 
-  private _touch: HTMLDivElement;
+  private _container: HTMLElement;
   private _canvas: HTMLCanvasElement;
   private _isPainting: boolean = false;
   private _onDraw?: TypeWatchCallback;
@@ -22,7 +20,10 @@ export class Watcher implements TypeWatcher {
   private _onDrawEnd?: TypeWatchCallback;
 
   constructor(opts: Options) {
-    this._touch = opts.touch;
+    // TODO
+    this._container = 
+      (document.querySelector('body') 
+      || document.querySelector('html')) as HTMLElement;
     this._canvas = opts.canvas;
     this._isPainting = false;
     this._initEvent();
@@ -42,7 +43,7 @@ export class Watcher implements TypeWatcher {
   }
 
   _initEvent() {
-    const touch = this._touch;
+    const touch = this._container;
     touch.addEventListener('mousedown', this._onStart.bind(this));
     touch.addEventListener('mousemove', this._onMove.bind(this));
     touch.addEventListener('mouseup', this._onEnd.bind(this));
@@ -51,15 +52,15 @@ export class Watcher implements TypeWatcher {
     touch.addEventListener('touchmove', this._onMove.bind(this));
     touch.addEventListener('touchend', this._onEnd.bind(this));
 
-    const mouseupEvent = new MouseEvent('mouseup');
-    document.querySelector('body')?.addEventListener('mousemove', (e) => {
-      // @ts-ignore
-      if (e && e.path && e.path[0] !== touch) {
-        if (this._isPainting === true) {
-          touch.dispatchEvent(mouseupEvent);
-        }
-      }
-    }, false)
+    // const mouseupEvent = new MouseEvent('mouseup');
+    // document.querySelector('body')?.addEventListener('mousemove', (e) => {
+    //   // @ts-ignore
+    //   if (e && e.path && e.path[0] !== touch) {
+    //     if (this._isPainting === true) {
+    //       touch.dispatchEvent(mouseupEvent);
+    //     }
+    //   }
+    // }, false)
   }
 
   _onStart(e: MouseEvent|TouchEvent) {

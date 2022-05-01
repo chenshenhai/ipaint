@@ -206,7 +206,8 @@ export default class Core {
   }
 
   private _isVaildPosition(p: TypeDataPosition) {
-    return ( p.x > 0 && p.y > 0 && p.t > 0)
+    const size = this.getSize();
+    return ( p.x >= (0 - size) && p.y >= (0 - size) && p.t > 0)
   }
 
   private _resetDeviceSize(num: number): number {
