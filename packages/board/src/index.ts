@@ -6,7 +6,7 @@ import util from '@ipaint/util';
 import Core from '@ipaint/core';
 import { Watcher } from './util/watcher';
 import Container from './container';
-import { parseMaskToCanvasPosition } from './util/parse';
+// import { parseMaskToCanvasPosition } from './util/parse';
 import { DEFAULT_BG_COLOR, DEFAULT_COLOR, DEFAULT_SIZE, DEFAULT_BRUSH, DEFAULT_PRESSURE } from './util/constant';
 import { DrawEvent, TypeDrawEventArgMap } from './util/draw-event';
 import { createDefaultBrushPattern } from './util/brush';
@@ -41,7 +41,7 @@ export default class Board {
   private _opts: PrivateOpts;
   private _container: Container;
 
-  private _mask: HTMLDivElement;
+  // private _mask: HTMLDivElement;
   private _canvas: HTMLCanvasElement;
   private _context: CanvasRenderingContext2D
   private _watcher: Watcher;
@@ -59,14 +59,13 @@ export default class Board {
     this._container = new Container(this._dom, {
       ...this._opts,
     });
-    this._mask = this._container.getMask();
+    // this._mask = this._container.getMask();
     this._canvas = this._container.getCanvas();
     this._context = this._canvas.getContext('2d') as CanvasRenderingContext2D;
+    this._core = new Core(this._context, { devicePixelRatio: this._opts.devicePixelRatio });
     this._watcher = new Watcher({
-      touch: this._mask,
       canvas: this._canvas,
     });
-    this._core = new Core(this._context, { devicePixelRatio: this._opts.devicePixelRatio });
     this._core.setBackgroundColor(DEFAULT_BG_COLOR);
     this._data = { brushMap: {}, paths: [] };
     this._event = new DrawEvent();
@@ -80,8 +79,18 @@ export default class Board {
     this._container.render();
     const watcher = this._watcher;
     const core = this._core;
-    watcher.onDrawStart((p) => {
 
+    function _parserDrawPosition(p: TypeDataPosition): TypeDataPosition {
+      const size: number = core.getSize() || 0;
+      return {
+        x: p.x - size / 2,
+        y: p.y - size / 2,
+        t: p.t,
+      }
+    }
+
+    watcher.onDrawStart((position) => {
+      const p = _parserDrawPosition(position)
       if (this._status === 'ALLOW_DRAWING') {
         core.drawStart()
       } else if (this._status === 'SCALE_CANVAS') {
@@ -91,15 +100,17 @@ export default class Board {
       }
       this._event.trigger('drawStart', p);
     });
-    watcher.onDraw((p) => {
+    watcher.onDraw((position) => {
+      const p = _parserDrawPosition(position)
       if (this._status === 'ALLOW_DRAWING') {
-        const _p = parseMaskToCanvasPosition(p, this._mask, this._canvas);
-        core.pushPosition(_p);
+        // const _p = parseMaskToCanvasPosition(p, this._mask, this._canvas);
+        core.pushPosition(p);
         core.drawLine();
       }
       this._event.trigger('draw', p);
     });
-    watcher.onDrawEnd((p) => {
+    watcher.onDrawEnd((position) => {
+      const p = _parserDrawPosition(position)
       if (this._status === 'ALLOW_DRAWING') {
         core.drawEnd();
         core.drawLine();

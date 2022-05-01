@@ -43,7 +43,7 @@ function draw(canvas, opts = {}) {
 
     core.setColor('#007fff');
     core.setPressure(0.4);
-    core.setBackgroundColor('#ffffff');
+    // core.setBackgroundColor('#ffffff');
     
     path.positions.forEach(async (p, i) => {
       if (i === 0) {
@@ -63,7 +63,7 @@ function draw(canvas, opts = {}) {
 
 function main() {
   draw(document.querySelector('#canvas'), { devicePixelRatio: 1 })
-  draw(document.querySelector('#canvas-2'), { devicePixelRatio: 2 })
+  // draw(document.querySelector('#canvas-2'), { devicePixelRatio: 2 })
 }
 
 main();
