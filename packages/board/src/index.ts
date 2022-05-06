@@ -101,7 +101,7 @@ export default class Board {
       this._event.trigger('drawStart', p);
     });
     watcher.onDraw((position) => {
-      const p = _parserDrawPosition(position)
+      const p = _parserDrawPosition(position);
       if (this._status === 'ALLOW_DRAWING') {
         // const _p = parseMaskToCanvasPosition(p, this._mask, this._canvas);
         core.pushPosition(p);
