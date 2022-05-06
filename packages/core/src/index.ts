@@ -20,6 +20,10 @@ const defaultOpts = {
   devicePixelRatio: 1
 }
 
+function isNum(num: any): boolean {
+  return (num >= 0 || num < 0)
+}
+
 export default class Core {
 
   private _ctx: CanvasRenderingContext2D;
@@ -206,8 +210,8 @@ export default class Core {
   }
 
   private _isVaildPosition(p: TypeDataPosition) {
-    const size = this.getSize();
-    return ( p.x >= (0 - size) && p.y >= (0 - size) && p.t > 0)
+    // const size = this.getSize();
+    return ( isNum(p.x) && isNum(p.y) && p.t > 0)
   }
 
   private _resetDeviceSize(num: number): number {
