@@ -12,7 +12,7 @@ type Options = {
 
 export class Watcher implements TypeWatcher {
 
-  private _container: HTMLElement;
+  private _container: Window;
   private _canvas: HTMLCanvasElement;
   private _isPainting: boolean = false;
   private _onDraw?: TypeWatchCallback;
@@ -20,10 +20,7 @@ export class Watcher implements TypeWatcher {
   private _onDrawEnd?: TypeWatchCallback;
 
   constructor(opts: Options) {
-    // TODO
-    this._container = 
-      (document.querySelector('body') 
-      || document.querySelector('html')) as HTMLElement;
+    this._container = window;
     this._canvas = opts.canvas;
     this._isPainting = false;
     this._initEvent();
@@ -43,14 +40,13 @@ export class Watcher implements TypeWatcher {
   }
 
   _initEvent() {
-    const touch = this._container;
-    touch.addEventListener('mousedown', this._onStart.bind(this));
-    touch.addEventListener('mousemove', this._onMove.bind(this));
-    touch.addEventListener('mouseup', this._onEnd.bind(this));
-
-    touch.addEventListener('touchstart', this._onStart.bind(this));
-    touch.addEventListener('touchmove', this._onMove.bind(this));
-    touch.addEventListener('touchend', this._onEnd.bind(this));
+    const container = this._container;
+    container.addEventListener('mousedown', this._onStart.bind(this));
+    container.addEventListener('mousemove', this._onMove.bind(this));
+    container.addEventListener('mouseup', this._onEnd.bind(this));
+    container.addEventListener('touchstart', this._onStart.bind(this));
+    container.addEventListener('touchmove', this._onMove.bind(this));
+    container.addEventListener('touchend', this._onEnd.bind(this));
 
     // const mouseupEvent = new MouseEvent('mouseup');
     // document.querySelector('body')?.addEventListener('mousemove', (e) => {
@@ -63,7 +59,10 @@ export class Watcher implements TypeWatcher {
     // }, false)
   }
 
-  _onStart(e: MouseEvent|TouchEvent) {
+  _onStart(e: MouseEvent | TouchEvent) {
+    if (e.target !== this._canvas) {
+      return;
+    }
     e.preventDefault();
     this._isPainting = true;
     if (typeof this._onDrawStart === 'function') {
@@ -74,7 +73,7 @@ export class Watcher implements TypeWatcher {
     }
   }
   
-  _onMove(e: MouseEvent|TouchEvent) {
+  _onMove(e: MouseEvent | TouchEvent) {
     e.preventDefault();
     e.stopPropagation();
     if (this._isPainting === true) {
@@ -98,7 +97,7 @@ export class Watcher implements TypeWatcher {
     }
   }
 
-  _getPosition(e: MouseEvent|TouchEvent) {
+  _getPosition(e: MouseEvent | TouchEvent) {
     const canvas = this._canvas;
     let x = 0;
     let y = 0;
@@ -127,4 +126,18 @@ export class Watcher implements TypeWatcher {
     return ( !isNaN(p.x) && !isNaN(p.y) && p.t > 0)
   }
   
+  // private _isLimitPosition(p: TypeDataPosition) {
+  //   if (!this._isVaildPosition(p)) {
+  //     return false;
+  //   }
+  //   const rect = this._canvas.getBoundingClientRect();
+  //   if (
+  //     p.x >= 0 && p.x <= rect.width
+  //     && p.y >= 0 && p.y <= rect.height
+  //   ) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 }

@@ -21,7 +21,6 @@ export default class Container {
   private _opts: PrivateOpts;
   private _dom: HTMLElement;
   private _wrapper: HTMLDivElement;
-  private _mask: HTMLDivElement;
   private _canvas: HTMLCanvasElement; 
   private _canvasScaleRatio: number = 1;
   private _isReady: boolean = false; 
@@ -31,7 +30,6 @@ export default class Container {
     this._opts = { ...defaultOpts, ...opts};
     const { width, height, canvasWidth, canvasHeight } = this._opts;
     this._wrapper= document.createElement('div');
-    this._mask = document.createElement('div');
     this._canvas = document.createElement('canvas');
 
     this._canvas.width = canvasWidth * this._opts.devicePixelRatio;
@@ -53,13 +51,6 @@ export default class Container {
       transform: 'matrix(1, 0, 0, 1, 0, 0)',
       display: 'flex',
     });
-    setStyle(this._mask, {
-      position: 'absolute',
-      top: '0',
-      bottom: '0',
-      left: '0',
-      right: '0',
-    })
   }
  
   public render() {
@@ -67,17 +58,12 @@ export default class Container {
       return;
     }
     this._wrapper.appendChild(this._canvas);
-    this._wrapper.appendChild(this._mask);
     this._dom.appendChild(this._wrapper);
     this._isReady = true;
   }
 
   public getCanvas() {
     return this._canvas;
-  }
-
-  public getMask() {
-    return this._mask;
   }
 
   public moveCanvas(x: number, y: number) {
