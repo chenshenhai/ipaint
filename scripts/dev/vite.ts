@@ -1,10 +1,11 @@
-const { AutoComplete } = require('enquirer');
-const chalk = require('chalk');
-const { createServer, defineConfig } = require('vite');
-const { resolvePackagePath } = require('./util/project');
-const { packages } = require('./../config');
+// @ts-ignore
+import AutoComplete from 'enquirer/lib/prompts/autocomplete';
+import chalk from 'chalk';
+import { createServer } from 'vite';
+import type { UserConfig } from 'vite';
+import { packages } from '../config';
+import { resolvePackagePath } from './util/project';
 
-dev();
 
 async function dev() {
   const pkgName = await inputPackageName();
@@ -21,9 +22,9 @@ async function dev() {
   );
 }
 
-function getViteConfig(pkgName) {
-  const viteConfig = defineConfig({
-    configFile: false,
+function getViteConfig(pkgName: string): UserConfig {
+  const viteConfig: UserConfig = {
+    // configFile: false,
     root: resolvePackagePath(pkgName),
     publicDir: resolvePackagePath(pkgName, 'dev'),
     server: {
@@ -40,12 +41,12 @@ function getViteConfig(pkgName) {
         /\.html$/
       ]
     },
-  });
+  };
   return viteConfig;
 }
 
 async function inputPackageName() {
-  choices = packages.map((pkg) => {
+  const choices = packages.map((pkg: any) => {
     return pkg.dirName;
   })
   const prompt = new AutoComplete({
@@ -55,6 +56,11 @@ async function inputPackageName() {
     initial: 0,
     choices: choices
   });
+
+  // @ts-ignore
   const pkgName = await prompt.run();
   return pkgName;
 }
+
+
+dev();
